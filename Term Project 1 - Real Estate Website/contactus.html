@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<!--Created by: Zack Feng - Created on: Nov. 19, 2021-->
+<html lang="en">
+
+<head>
+<meta content="en-us" http-equiv="Content-Language">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>Assignment 4 - Online Evaluation Forms</title>
+<link href="TermProjectStyles.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+</style>
+</head>
+
+<body>
+<header>
+		 <nav class="navbar">
+ <div class="logo">
+	 <a href="index.html"><img alt="" src="img/DLRE-700x132.png" width="300"></a></div>
+ <ul class="nav-links">
+ <div class="menu">
+ <li><a href="index.html">Home</a></li>
+ <li><a href="properties.html">Properties</a></li>
+ <li><a href="contactus.html">Contact Us</a></li>
+ <li><a href="sitemap.html">Site Map &amp; Credits</a></li>
+ </div>
+ </ul>
+ </nav>
+ </header>
+ 
+<div class="container">
+	<h3>Contact Us<br><br></h3>
+	<p>Please tell us the type of properties you are interested in by filling the form below:<br><br></p>
+	<form action="mailto:zfeng34@my.centennialcollege.ca" method="post" autocomplete="on">
+		<table class="forms">
+			<tr>
+				<th>First Name:</th>
+				<td><input name="txtFirstName" size="35" tabindex="1" type="text" required></td>
+			</tr>
+			<tr>
+				<th>Last Name:</th>
+				<td><input name="txtLastName" size="35" tabindex="2" type="text" required></td>
+			</tr>
+			<tr>
+				<th>Phone:</th>
+				<td><input name="txtPhone" size="10" tabindex="3" type="tel" required></td>
+			</tr>
+
+			<tr>
+				<th>Email:</th>
+				<td><input name="txtEmail" size="35" tabindex="4" type="email" required></td>
+			</tr>
+			<tr>
+				<th>Type of property</th>
+				<td><input name="optHouse" tabindex="5" type="checkbox" value="House">House
+				<input name="optCondo" tabindex="6" type="checkbox" value="Condo">Condo
+				<input name="optOther" tabindex="7" type="checkbox" value="Other">Other (Please specify below)</td>
+			</tr>
+			<tr>
+				<th>Number of Bedrooms</th>
+				<td><input name="txtBedroomNum" tabindex="8" type="number" maxlength="2"></td>
+			</tr>
+			<tr>
+				<th>Number of Bathrooms</th>
+				<td><input name="txtBathroomNum" tabindex="9" type="number" maxlength="2"></td>
+			</tr>
+			<tr>
+				<th>Price Range</th>
+				<td><input name="txtPriceMin" tabindex="10" type="number" placeholder="min">
+				~
+				<input name="txtPriceMax" tabindex="11" type="number" placeholder="max"></td>
+			</tr>			
+			<tr>	
+				<th>Other Requirements:</th>
+				<td><textarea cols="60" name="txtSpecialReq" rows="7" tabindex="12"></textarea></td>
+			</tr>
+			<tr>
+			<th></th>
+			<td><input name="btnSubmit" tabindex="13" type="submit" value="Submit"><input name="btnReset" tabindex="14" type="reset" value="Clear Form"></td>
+			
+			</tr>
+	</table>
+	</form>
+	<div >
+	<p>&nbsp;</p>
+		<p><em>Thank you very much for your feedback! A member of the team will contact you soon.</em><br><br></p>
+	<p><a href="index.html">Return to homepage</a> </p>
+	</div>
+
+</div>
+<footer>
+Copyright &copy; <i>Ze Feng 301210794</i> Web Interface Design (SEC. 006) Fall Semester 2021
+</footer>
+</body>
+
+</html>

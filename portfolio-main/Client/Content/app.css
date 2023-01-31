@@ -1,0 +1,65 @@
+
+/*app.css-Ze Feng 301210794, Jan 29 2023  */
+
+/*home page */
+#container1{
+   background-image:linear-gradient(to right bottom, #bbd1e8,white);
+}
+#introduction{
+    margin-top:20px;
+}
+#welcome{
+   font-family: 'Dancing Script', cursive;
+   font-weight: bolder;
+   font-size: 3.9em;
+}
+/*footer */
+#footicon{
+    float:right;
+    color:white;
+}
+#footicon span{
+    margin-right:1em;
+}
+#footer{
+    color:white;
+    
+}
+#footicon a{
+    text-decoration: none;
+    color:white;
+}
+/*nva bar*/
+.nav-link:hover{
+    color: rgb(255, 255, 255) !important;
+}
+.titlemark{
+    margin-bottom:3em;
+}
+/*other page*/
+.pagetitle{
+    margin-top: 3em;
+    display:flex;
+    justify-content: center;
+    flex-direction:column;
+    align-items: center; 
+    margin-bottom: 3em;
+    
+}
+.col-md-8{
+    background-color:gainsboro;
+}
+#buttons{
+    display:flex;
+    justify-content: center;
+   
+}
+#space{
+    margin:1em;
+}
+#navlogo{
+    margin-left:2em;
+}
+form{
+    margin-bottom: 2em;
+}

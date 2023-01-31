@@ -1,0 +1,40 @@
+<div class="pagetitle">
+    <h2><%= title %></h2>
+    <form action="/home">
+        <div class="row mb-1">
+            <label class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-12">
+              <input type="text" class="form-control" id="name">
+            </div>
+          </div>
+          <div class="row mb-1">
+            <label class="col-sm-2 col-form-label">Phone</label>
+            <div class="col-sm-12">
+              <input type="text" class="form-control" id="phone" >
+            </div>
+          </div>
+          <div class="row mb-1">
+              <label  class="col-sm-2 col-form-label">Email</label>
+             
+              <div class="col-sm-12">
+                <input type="text" onkeyup="EmailValidate();" class="form-control" id="email" required >
+                <span style="color:red;" id="error"></span>
+              </div>
+              
+          </div>
+          <div class="row mb-1">
+               
+               <textarea class="col-sm-12 form-control" id="message" cols="28" rows="10" placeholder="please leave your message here" ></textarea>
+          
+           </div> 
+           <div id ="buttons">
+               <button class="col-sm-3 btn btn-primary" type="submit" id="submit" onclick="CreateCookies();">Submit</button>
+               <span id="space"></span> 
+               <button class="col-sm-3 btn btn-primary" type="reset" onclick = "ResetF();" id="reset">Reset</button>
+           </div>
+    </form>
+
+       
+      
+
+</div>
