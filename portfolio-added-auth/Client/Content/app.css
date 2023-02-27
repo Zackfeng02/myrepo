@@ -1,0 +1,127 @@
+
+/*app.css-Ze Feng 301210794, Jan 29 2023  */
+
+/*home page */
+#container1{
+   background-image:linear-gradient(to right bottom, #bbd1e8,white);
+}
+#introduction{
+    margin-top:20px;
+}
+#welcome{
+   font-family: 'Dancing Script', cursive;
+   font-weight: bolder;
+   font-size: 3.9em;
+}
+/*footer */
+#footicon{
+    float:right;
+    color:white;
+}
+#footicon span{
+    margin-right:1em;
+}
+#footer{
+    color:white;
+    
+}
+#footicon a{
+    text-decoration: none;
+    color:white;
+}
+/*nva bar*/
+.nav-link:hover{
+    color: rgb(255, 255, 255) !important;
+}
+.titlemark{
+    margin-bottom:3em;
+}
+/*other page*/
+.pagetitle{
+    margin-top: 3em;
+    display:flex;
+    justify-content: center;
+    flex-direction:column;
+    align-items: center; 
+    margin-bottom: 3em;
+    
+}
+.col-md-8{
+    background-color:gainsboro;
+}
+#buttons{
+    display:flex;
+    justify-content: center;
+   
+}
+#space{
+    margin:1em;
+}
+#navlogo{
+    margin-left:2em;
+}
+form{
+    margin-bottom: 2em;
+}
+
+.cardcenter{
+    display:flex;
+    justify-content:center;
+}
+
+
+.input-group-addon:first-child
+{
+    border-right: 0;
+}
+
+.input-group-addon
+{
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    text-align: center;
+    border: 1px solid darkgrey;
+    border-radius: 4xpx; 
+}
+
+.input-group-addon .fa
+{
+    font-size: 18px;
+}
+
+.input-group .form-control
+{
+    position:relative;
+    z-index: 2;
+    float:left;
+    margin-bottom: 0;
+}
+
+.input-group .form-control:last-child
+{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+
+
+.login
+{
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    background-color: lightgrey;
+    border-radius: .3rem;
+}
+
+.login input
+{
+    background-color: white;
+    border-color: darkgrey;
+    border-radius: .4em;
+    width: 100%;
+}
+#loginbox{
+    margin-top:2em;
+}

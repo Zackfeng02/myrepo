@@ -1,0 +1,40 @@
+<div class="container">
+    <h1>Business Contacts List</h1>
+    <a href="/add" id="addButton" class="btn btn-primary mb-1"><i class="fa-solid fa-circle-plus"></i> Add Contact</a>
+  <div class="row">
+      <div class="col">
+         <table class="table table-striped table-bordered table-hover">
+          <thead class="table-primary">
+              <tr>
+                 <th scope="col" class="text-center"></th>
+                 <th scope="col">Contact Name</th>
+                 <th scope="col">Contact Number</th>
+                 <th scope="col">Email Address</th>
+               
+                 <th></th>
+                 <th></th>
+              </tr>
+          </thead>
+          <tbody id="movieList">
+            <% for(let count = 0; count < contacts.length; count++) {%>
+             
+              <tr>
+                <th scope="row" class="text-center"><%= count + 1%></th>
+                <td><%= contacts[count].Name %></td>
+                <td><%= contacts[count].Phone %></td>
+                <td><%= contacts[count].Email %></td>
+                <td class="text-center"><a href="/edit/<%= contacts[count]._id %>" class="btn btn-primary btn-sm edit"><i class="fa-solid fa-pen-to-square"></i> Edit</a></td>
+                <td class="text-center"><a href="/delete/<%= contacts[count]._id %>" class="btn btn-danger btn-sm delete"><i class="fa-solid fa-trash-can"></i> Delete</a></td>
+              </tr>
+
+             <% } %>
+            
+    </tbody>
+   </table>
+          
+  
+      </div>
+  </div>
+  
+  </div>
+  
