@@ -82,7 +82,7 @@ export function ProcessEditPage(req: express.Request, res: express.Response, nex
        Email: req.body.email
    });
  
-   // update the movie in the database
+   // update the Contact in the database
    Contact.updateOne({_id: id}, updatedContact, function(err:ErrorCallback)
    {
      if(err)
