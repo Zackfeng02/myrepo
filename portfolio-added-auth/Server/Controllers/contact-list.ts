@@ -1,4 +1,5 @@
 import express from 'express';
+import { CallbackError } from 'mongoose';
 import Contact from '../Models/contact';
 
 import { UserDisplayName } from '../Util';
@@ -53,7 +54,7 @@ export function ProcessAddPage(req: express.Request, res: express.Response, next
        Email: req.body.email
    });
 //add the new contact to collection
-   Contact.create(newContact, function(err: ErrorCallback)
+   Contact.create(newContact, function(err:CallbackError)
    {
        if(err)
        {

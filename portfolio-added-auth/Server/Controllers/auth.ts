@@ -30,7 +30,7 @@ export function DisplayRegisterPage(req: express.Request, res: express.Response,
 //process Functions
 export function ProcessLoginPage(req: express.Request, res: express.Response, next: express.NextFunction)
 {
-    passport.authenticate('local', function(err, user, info)
+    passport.authenticate('local', function(err: any, user: Express.User, info: any)
     {
      // are there server errors?
      if(err)
