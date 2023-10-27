@@ -36,4 +36,10 @@ public class CustomerController {
         customerService.deleteCustomer(id);
         return "redirect:/customers/";
     }
+    
+    @GetMapping("/register")
+    public String register(Model model) {
+        model.addAttribute("customer", new Customer());
+        return "customer-form";
+    }
 }

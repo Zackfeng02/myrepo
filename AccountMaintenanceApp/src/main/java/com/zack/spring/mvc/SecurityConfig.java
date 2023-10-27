@@ -1,24 +1,45 @@
 package com.zack.spring.mvc;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
-                .antMatchers("/").permitAll()  // Allow access to the index page
-                .anyRequest().authenticated()  // All other requests require authentication
-            .and()
-            .formLogin()
-                .loginPage("/login")  // Custom login page, which is actually the index page in your case
-                .permitAll();
-    }
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http
+			.authorizeHttpRequests((requests) -> requests
+				.requestMatchers("/", "/home").permitAll()
+				.anyRequest().authenticated()
+			)
+			.formLogin((form) -> form
+				.loginPage("/login")
+				.permitAll()
+			)
+			.logout((logout) -> logout.permitAll());
+
+		return http.build();
+	}
+
+	@Bean
+	UserDetailsService userDetailsService() {
+		UserDetails user =
+			 User.withDefaultPasswordEncoder()
+				.username("user")
+				.password("password")
+				.roles("USER")
+				.build();
+
+		return new InMemoryUserDetailsManager(user);
+	}
 }
-

@@ -22,18 +22,18 @@ public class AdminController {
     @GetMapping("/")
     public String showAdminPage(Model model) {
         // Fetch the count of customers by account type
-        Map<String, Long> countByAccountType = customerService.getCountByAccountType();
+        //Map<String, Long> countByAccountType = customerService.getCountByAccountType();
         
         // Fetch the list of customers whose savings account balance is more than $1000
-        List<Customer> customersWithHighBalance = customerService.getCustomersWithHighBalance(1000);
+        //List<Customer> customersWithHighBalance = customerService.getCustomersWithHighBalance(1000);
         
         // Fetch the list of customers who have opted for an overdraft limit
-        List<Customer> customersWithOverdraft = customerService.getCustomersWithOverdraft();
+        //List<Customer> customersWithOverdraft = customerService.getCustomersWithOverdraft();
 
         // Add these to the model
-        model.addAttribute("countByAccountType", countByAccountType);
-        model.addAttribute("customersWithHighBalance", customersWithHighBalance);
-        model.addAttribute("customersWithOverdraft", customersWithOverdraft);
+        //model.addAttribute("countByAccountType", countByAccountType);
+        //model.addAttribute("customersWithHighBalance", customersWithHighBalance);
+        //model.addAttribute("customersWithOverdraft", customersWithOverdraft);
 
         return "admin";
     }

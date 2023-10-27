@@ -62,4 +62,10 @@ public class AccountController {
         accountService.deleteAccount(id);
         return "redirect:/accounts/";
     }
+    
+    @PostMapping("/login")
+    public String login(@RequestParam String username, @RequestParam String password, Model model) {
+        // Implement login logic here
+        return "redirect:/accounts/";
+    }
 }

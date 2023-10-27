@@ -20,4 +20,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     // Delete: Custom query to delete a customer by email
     @Query("DELETE FROM Customer c WHERE c.email = :email")
     void deleteByEmail(@Param("email") String email);
+    
+    // find username for login
+    Customer findByUsername(String username);
 }
