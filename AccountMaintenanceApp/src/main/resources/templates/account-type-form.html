@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create/Edit Account Type</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+	<div th:insert="fragments :: navbar"></div>
+    <h1>Create/Edit Account Type</h1>
+    <form th:action="@{/account-types/save}" th:object="${accountType}" method="post">
+        <input type="hidden" th:field="*{id}">
+        <label>Type:</label>
+        <input type="text" th:field="*{type}">
+        <br>
+        <label>Description:</label>
+        <textarea th:field="*{description}"></textarea>
+        <br>
+        <input type="submit" value="Save">
+    </form>
+    <a href="/account-types/">Back to List</a>
+</body>
+</html>

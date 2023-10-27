@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Account Type</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+	<div th:insert="fragments :: navbar"></div>
+    <h1>Account Type Details</h1>
+    <p>ID: <span th:text="${accountType.id}"></span></p>
+    <p>Type: <span th:text="${accountType.type}"></span></p>
+    <p>Description: <span th:text="${accountType.description}"></span></p>
+    <a href="/account-types/">Back to List</a>
+</body>
+</html>

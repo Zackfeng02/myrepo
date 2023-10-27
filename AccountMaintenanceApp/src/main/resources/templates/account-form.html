@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create/Edit Account</title>
+</head>
+<body>
+    <h1>Create/Edit Account</h1>
+    <form th:action="@{/accounts/save}" th:object="${account}" method="post">
+        <input type="hidden" th:field="*{id}">
+        <label>Account Type:</label>
+        <input type="text" th:field="*{accountType}">
+        <br>
+        <label>Balance:</label>
+        <input type="number" th:field="*{balance}">
+        <br>
+        <label>Overdraft Limit:</label>
+        <input type="checkbox" th:field="*{overDraftLimit}">
+        <br>
+        <input type="submit" value="Save">
+    </form>
+    <a href="/accounts/">Back to List</a>
+</body>
+</html>

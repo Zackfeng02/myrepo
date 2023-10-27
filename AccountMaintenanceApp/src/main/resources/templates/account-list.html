@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Account List</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+	<div th:insert="fragments :: navbar"></div>
+    <h1>Account List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Account Type</th>
+                <th>Balance</th>
+                <th>Overdraft Limit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="account : ${accounts}">
+                <td th:text="${account.id}"></td>
+                <td th:text="${account.accountType}"></td>
+                <td th:text="${account.balance}"></td>
+                <td th:text="${account.overDraftLimit}"></td>
+                <td>
+                    <a th:href="@{/accounts/view/{id}(id=${account.id})}">View</a> |
+                    <a th:href="@{/accounts/edit/{id}(id=${account.id})}">Edit</a> |
+                    <a th:href="@{/accounts/delete/{id}(id=${account.id})}">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/accounts/new">Create New Account</a>
+</body>
+</html>

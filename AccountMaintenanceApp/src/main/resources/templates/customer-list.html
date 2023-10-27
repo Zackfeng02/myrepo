@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customer List</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+	<div th:insert="fragments :: navbar"></div>
+    <h1>Customer List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="customer : ${customers}">
+                <td th:text="${customer.id}"></td>
+                <td th:text="${customer.name}"></td>
+                <td th:text="${customer.email}"></td>
+                <td th:text="${customer.address}"></td>
+                <td th:text="${customer.phoneNumber}"></td>
+                <td>
+                    <a th:href="@{/customers/view/{id}(id=${customer.id})}">View</a> |
+                    <a th:href="@{/customers/edit/{id}(id=${customer.id})}">Edit</a> |
+                    <a th:href="@{/customers/delete/{id}(id=${customer.id})}">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- Optional: Add a link to create a new customer -->
+    <a href="/customers/new">Create New Customer</a>
+</body>
+</html>

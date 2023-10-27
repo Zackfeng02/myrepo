@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Account</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+	<div th:insert="fragments :: navbar"></div>
+    <h1>Account Details</h1>
+    <p>ID: <span th:text="${account.id}"></span></p>
+    <p>Account Type: <span th:text="${account.accountType}"></span></p>
+    <p>Balance: <span th:text="${account.balance}"></span></p>
+    <p>Overdraft Limit: <span th:text="${account.overDraftLimit}"></span></p>
+    <a href="/accounts/">Back to List</a>
+</body>
+</html>

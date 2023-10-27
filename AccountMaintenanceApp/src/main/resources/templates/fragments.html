@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Fragments</title>
+</head>
+<body>
+    <div th:fragment="navbar">
+        <nav>
+            <ul>
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/customers/}">Customers</a></li>
+                <li><a th:href="@{/accounts/}">Accounts</a></li>
+                <li><a th:href="@{/account-types/}">Account Types</a></li>
+                <li><a th:href="@{/admin/}">Admin</a></li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>
