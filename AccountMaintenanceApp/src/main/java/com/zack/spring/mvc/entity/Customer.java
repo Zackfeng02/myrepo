@@ -34,7 +34,8 @@ public class Customer {
 
     @NotBlank
     @Size(min = 10, max = 15)
-    private String phoneNumber;
+    @Column(name = "phone_number")
+    private String phone_number;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Account> accounts;
@@ -73,11 +74,11 @@ public class Customer {
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return phone_number;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.phone_number = phoneNumber;
     }
 
     public List<Account> getAccounts() {

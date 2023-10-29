@@ -14,7 +14,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> findByAccountType(@Param("accountType") String accountType);
 
     // Read: Custom query to find accounts with overdraft limit enabled
-    @Query("SELECT a FROM Account a WHERE a.overDraftLimit = true")
+    @Query("SELECT a FROM Account a WHERE a.overDraftLimit > 0")
     List<Account> findWithOverDraftLimit();
 
     // Delete: Custom query to delete accounts by account type

@@ -1,17 +1,20 @@
 package com.zack.spring.mvc.service;
-import com.zack.spring.mvc.entity.Customer;
-import com.zack.spring.mvc.repository.CustomerRepository;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import java.util.List;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import com.zack.spring.mvc.entity.Customer;
+import com.zack.spring.mvc.repository.CustomerRepository;
 
 @Service
 public class CustomerService implements UserDetailsService {
+
     @Autowired
     private CustomerRepository customerRepository;
 
@@ -30,21 +33,16 @@ public class CustomerService implements UserDetailsService {
     public void deleteCustomer(Long id) {
         customerRepository.deleteById(id);
     }
-    
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Fetch the customer from the database using the repository
         Customer customer = customerRepository.findByUsername(username);
-        
-        // If the customer is not found, throw an exception
         if (customer == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        
-        // Create a UserDetails object using the Spring Security User class
         return User.withUsername(customer.getUsername())
                    .password(customer.getPassword())
-                   .roles("USER")  // You can set roles based on your requirements
+                   .roles("USER")
                    .build();
     }
 }

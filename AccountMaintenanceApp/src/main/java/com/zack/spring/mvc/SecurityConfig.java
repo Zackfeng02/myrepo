@@ -3,32 +3,33 @@ package com.zack.spring.mvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+
+import com.zack.spring.mvc.service.CustomerService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
     private HandlerMappingIntrospector mvcHandlerMappingIntrospector;
-
+    
+    @Autowired
+    private CustomerService customerService;
+    
     @Bean
-    static PasswordEncoder passwordEncoder(){
+    BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         MvcRequestMatcher mvcRequestMatcher = new MvcRequestMatcher(mvcHandlerMappingIntrospector, "/register/**");
@@ -36,16 +37,18 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authorize) ->
                     authorize.requestMatchers(mvcRequestMatcher).permitAll()
+                    		.requestMatchers("/register", "/register/**").permitAll()
                             .requestMatchers("/index").permitAll()
                             .requestMatchers("/users").hasRole("ADMIN")
-            ).formLogin(
-                    form -> form
+                            .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+            )
+            .formLogin(form -> form
                             .loginPage("/login")
                             .loginProcessingUrl("/login")
-                            .defaultSuccessUrl("/users")
+                            .defaultSuccessUrl("/cus_overview")
                             .permitAll()
-            ).logout(
-                    logout -> logout
+            )
+            .logout(logout -> logout
                             .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                             .permitAll()
             );
@@ -53,10 +56,9 @@ public class SecurityConfig {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureGlobal(AuthenticationManagerBuilder auth, @Lazy BCryptPasswordEncoder passwordEncoder) throws Exception {
         auth
-            .userDetailsService(userDetailsService)
-            .passwordEncoder(passwordEncoder());
+            .userDetailsService(customerService)
+            .passwordEncoder(passwordEncoder);
     }
 }
-

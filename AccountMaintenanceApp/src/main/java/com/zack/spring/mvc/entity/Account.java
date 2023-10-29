@@ -19,7 +19,7 @@ public class Account {
     private Double balance;
 
     @NotNull
-    private Boolean overDraftLimit;
+    private Integer overDraftLimit;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -50,11 +50,11 @@ public class Account {
         this.balance = balance;
     }
 
-    public Boolean getOverDraftLimit() {
+    public Integer getOverDraftLimit() {
         return overDraftLimit;
     }
 
-    public void setOverDraftLimit(Boolean overDraftLimit) {
+    public void setOverDraftLimit(Integer overDraftLimit) {
         this.overDraftLimit = overDraftLimit;
     }
 

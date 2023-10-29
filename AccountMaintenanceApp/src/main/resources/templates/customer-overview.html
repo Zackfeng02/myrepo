@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+	<div th:insert="fragments :: navbar"></div>
+    
+	<!-- Customer Information -->
+    <h2>Personal Information</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="customer : ${customers}">
+                <td th:text="${customer.id}"></td>
+                <td th:text="${customer.name}"></td>
+                <td th:text="${customer.email}"></td>
+                <td th:text="${customer.address}"></td>
+                <td th:text="${customer.phoneNumber}"></td>
+                <td>
+                    <a th:href="@{/customers/view/{id}(id=${customer.id})}">View</a> |
+                    <a th:href="@{/customers/edit/{id}(id=${customer.id})}">Edit</a> |
+                    <a th:href="@{/customers/delete/{id}(id=${customer.id})}">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- Optional: Add a link to create a new customer -->
+    <a href="/customers/new">Create New Customer</a>
+    <!-- Account Information -->
+    <h2>Account Information</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Account Type</th>
+                <th>Balance</th>
+                <th>Overdraft Limit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="account : ${accounts}">
+                <td th:text="${account.id}"></td>
+                <td th:text="${account.accountType}"></td>
+                <td th:text="${account.balance}"></td>
+                <td th:text="${account.overDraftLimit}"></td>
+                <td>
+                    <a th:href="@{/accounts/view/{id}(id=${account.id})}">View</a> |
+                    <a th:href="@{/accounts/edit/{id}(id=${account.id})}">Edit</a> |
+                    <a th:href="@{/accounts/delete/{id}(id=${account.id})}">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/accounts/new">Create New Account</a>
+</body>
+</html>
