@@ -5,10 +5,11 @@
     <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
-    <div th:insert="~{fragments :: navbar}"></div> <!-- Updated fragment expression -->
+    <div th:insert="~{fragments :: navbar}"></div>
     <h1>Edit Customer Information</h1>
-    <form th:action="@{/customers/save}" th:object="${customer}" method="post">
-        <input type="hidden" th:field="*{id}">
+    <form th:action="@{/cus_overview/save}" th:object="${customer}" method="post">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+        <input type="hidden" th:field="*{customerId}">
         
         <!-- Username -->
         <label>Username:</label>

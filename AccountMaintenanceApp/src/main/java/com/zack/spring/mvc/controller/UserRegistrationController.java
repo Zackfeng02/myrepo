@@ -16,22 +16,23 @@ import org.slf4j.LoggerFactory;
 @RequestMapping("/register")
 public class UserRegistrationController {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserRegistrationController.class);
-	
+    private static final Logger logger = LoggerFactory.getLogger(UserRegistrationController.class);
+    
     @Autowired
     private UserRegistrationService userRegistrationService;
 
     @GetMapping("/")
     public String register(Model model) {
         model.addAttribute("customer", new Customer());
-        // Changed the return value to "registration-form"
-        return "registration-form";
+        return "customer-form"; 
     }
 
+    @Transactional
     @PostMapping("/")
     public String registerCustomer(@ModelAttribute Customer customer) {
-    	logger.info("Received customer data: {}", customer);
+        logger.info("Received customer data: {}", customer);
         userRegistrationService.registerCustomer(customer);
-        return "redirect:/login/";
+        return "redirect:/login";
     }
 }
+

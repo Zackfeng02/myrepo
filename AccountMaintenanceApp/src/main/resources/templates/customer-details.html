@@ -6,7 +6,9 @@
 </head>
 <body>
     <h1>Customer Details</h1>
-    <p>ID: <span th:text="${customer.id}"></span></p>
+    <p>ID: <span th:text="${customer.customerId}"></span></p>
+    <p>Username: <span th:text="${customer.username}"></span></p>
+    <p>Password: <span th:text="${customer.password}"></span></p>
     <p>Name: <span th:text="${customer.name}"></span></p>
     <p>Email: <span th:text="${customer.email}"></span></p>
     <p>Address: <span th:text="${customer.address}"></span></p>

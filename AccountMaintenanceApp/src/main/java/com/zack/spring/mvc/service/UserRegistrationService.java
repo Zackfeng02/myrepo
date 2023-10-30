@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 import com.zack.spring.mvc.entity.Customer;
 import com.zack.spring.mvc.repository.CustomerRepository;
 

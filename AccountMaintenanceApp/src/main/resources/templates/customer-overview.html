@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Welcome</title>
+    <title>Customer Overview</title>
     <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
@@ -9,34 +9,19 @@
     
 	<!-- Customer Information -->
     <h2>Personal Information</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>Phone Number</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="customer : ${customers}">
-                <td th:text="${customer.id}"></td>
-                <td th:text="${customer.name}"></td>
-                <td th:text="${customer.email}"></td>
-                <td th:text="${customer.address}"></td>
-                <td th:text="${customer.phoneNumber}"></td>
-                <td>
-                    <a th:href="@{/customers/view/{id}(id=${customer.id})}">View</a> |
-                    <a th:href="@{/customers/edit/{id}(id=${customer.id})}">Edit</a> |
-                    <a th:href="@{/customers/delete/{id}(id=${customer.id})}">Delete</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <!-- Optional: Add a link to create a new customer -->
-    <a href="/customers/new">Create New Customer</a>
+		<p>ID: <span th:text="${customer.customerId}"></span></p>
+		<p>Username: <span th:text="${customer.username}"></span></p>
+		<p>Name: <span th:text="${customer.name}"></span></p>
+		<p>Email: <span th:text="${customer.email}"></span></p>
+		<p>Address: <span th:text="${customer.address}"></span></p>
+		<p>Phone Number: <span th:text="${customer.phone_number}"></span></p>
+		<p>Actions: 
+					<a th:href="@{/cus_overview/view/{id}(id=${customer.customerId})}">View</a> |
+			        <a th:href="@{/cus_overview/edit/{id}(id=${customer.customerId})}">Edit</a> |
+			        <a th:href="@{/cus_overview/delete/{id}(id=${customer.customerId})}">Delete</a>
+		</p>
+    <a href="/register">Create New Customer</a>
+
     <!-- Account Information -->
     <h2>Account Information</h2>
     <table border="1">
@@ -51,18 +36,18 @@
         </thead>
         <tbody>
             <tr th:each="account : ${accounts}">
-                <td th:text="${account.id}"></td>
-                <td th:text="${account.accountType}"></td>
+                <td th:text="${account.accountNumber}"></td>
+                <td th:text="${account.accountTypeCode}"></td> <!-- Updated -->
                 <td th:text="${account.balance}"></td>
                 <td th:text="${account.overDraftLimit}"></td>
-                <td>
-                    <a th:href="@{/accounts/view/{id}(id=${account.id})}">View</a> |
-                    <a th:href="@{/accounts/edit/{id}(id=${account.id})}">Edit</a> |
-                    <a th:href="@{/accounts/delete/{id}(id=${account.id})}">Delete</a>
-                </td>
+			    <td>
+			        <a th:href="@{/acc_overview/view/{id}(id=${account.accountNumber})}">View</a> |
+			        <a th:href="@{/acc_overview/edit/{id}(id=${account.accountNumber})}">Edit</a> |
+			        <a th:href="@{/acc_overview/delete/{id}(id=${account.accountNumber})}">Delete</a>
+			    </td>
             </tr>
         </tbody>
     </table>
-    <a href="/accounts/new">Create New Account</a>
+    <a href="/acc_overview/new">Create New Account</a>
 </body>
 </html>

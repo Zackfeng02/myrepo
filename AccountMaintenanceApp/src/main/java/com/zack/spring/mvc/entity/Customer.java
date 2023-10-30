@@ -13,7 +13,7 @@ import java.util.List;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long customer_id;
     
     @NotBlank(message = "Username cannot be blank")
     private String username;
@@ -41,12 +41,12 @@ public class Customer {
     private List<Account> accounts;
 
     // Getters and Setters
-    public Long getId() {
-        return id;
+    public Long getCustomerId() {
+        return customer_id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCustomerId(Long customer_id) {
+        this.customer_id = customer_id;
     }
 
     public String getName() {

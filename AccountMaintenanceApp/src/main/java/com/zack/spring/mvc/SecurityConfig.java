@@ -38,8 +38,11 @@ public class SecurityConfig {
             .authorizeHttpRequests((authorize) ->
                     authorize.requestMatchers(mvcRequestMatcher).permitAll()
                     		.requestMatchers("/register", "/register/**").permitAll()
+                    		.requestMatchers("/").permitAll()
                             .requestMatchers("/index").permitAll()
-                            .requestMatchers("/users").hasRole("ADMIN")
+                            .requestMatchers("/cus_overview", "/cus_overview/**").permitAll()
+                            .requestMatchers("/acc_overview", "/acc_overview/**").permitAll()
+                            .requestMatchers("/admin").hasRole("ADMIN")
                             .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
             )
             .formLogin(form -> form

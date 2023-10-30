@@ -19,8 +19,8 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    public Account getAccountById(Long id) {
-        return accountRepository.findById(id).orElse(null);
+    public List<Account> getAccountById(Long customer_id) {
+        return (List<Account>) accountRepository.findByCustomerId(customer_id);
     }
 
     public void deleteAccount(Long id) {

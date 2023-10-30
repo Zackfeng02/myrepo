@@ -10,36 +10,40 @@ import jakarta.persistence.*;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "account_number")
+    private Integer accountNumber;
 
-    @NotNull
-    private String accountType;
+    @Column(name = "account_type_code")
+    private String accountTypeCode;
 
     @Min(0)
+    @Column(name = "balance")
     private Double balance;
 
     @NotNull
+    @Column(name = "over_draft_limit")
     private Integer overDraftLimit;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private Customer customer;
 
     // Getters and Setters
-    public Long getId() {
-        return id;
+    
+    public Integer getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAccountNumber(Integer accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public String getAccountType() {
-        return accountType;
+        return accountTypeCode;
     }
 
     public void setAccountType(String accountType) {
-        this.accountType = accountType;
+        this.accountTypeCode = accountType;
     }
 
     public Double getBalance() {

@@ -1,9 +1,12 @@
 package com.zack.spring.mvc.controller;
+import com.zack.spring.mvc.entity.Account;
 import com.zack.spring.mvc.entity.Customer;
+import com.zack.spring.mvc.service.AccountService;
 import com.zack.spring.mvc.service.CustomerService;
-import com.zack.spring.mvc.service.UserRegistrationService;
-
 import jakarta.transaction.Transactional;
+
+import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,58 +14,94 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/customers")
+@RequestMapping("/cus_overview")
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
     
     @Autowired
-    private UserRegistrationService userRegistrationService;
+    private AccountService accountService;
 
+    //@GetMapping("/")
+    //public String listCustomers(Model model) {
+       //model.addAttribute("customers", customerService.getAllCustomers());
+        //return "customer-list";
+    //}
+
+    //@GetMapping("/view/{id}")
+    //public String viewCustomer(@PathVariable Integer customer_id, Model model) {
+        //model.addAttribute("customer", customerService.getCustomerById(customer_id));
+        //return "customer-view";
+    //}
+    
     @GetMapping("/")
-    public String listCustomers(Model model) {
-        model.addAttribute("customers", customerService.getAllCustomers());
-        return "customer-list";
+    public String customerOverview(Model model, Principal principal) {
+        String username = principal.getName();
+        
+        // Check if the username is null or empty
+        if (username != null && !username.isEmpty()) {
+            Customer customer = customerService.findByUsername(username);
+            
+            // Check if the customer object is null
+            if (customer != null) {
+                List<Account> accounts = accountService.getAccountById(customer.getCustomerId());
+                
+                // Check if the accounts list is null or empty
+                if (accounts != null && !accounts.isEmpty()) {
+                    model.addAttribute("customer", customer);
+                    model.addAttribute("accounts", accounts);
+                } else {
+                    // Handle the case where accounts are not found
+                    model.addAttribute("errorMessage", "No accounts found for this customer.");
+                }
+            } else {
+                // Handle the case where the customer is not found
+                model.addAttribute("errorMessage", "Customer not found.");
+            }
+        } else {
+            // Handle the case where the username is not found
+            model.addAttribute("errorMessage", "Username not found.");
+        }
+        
+        return "customer-overview";
     }
 
-    @GetMapping("/view/{id}")
-    public String viewCustomer(@PathVariable Long id, Model model) {
-        model.addAttribute("customer", customerService.getCustomerById(id));
-        return "customer-view";
-    }
 
-    @GetMapping("/customers/new")
+
+    // New customer creation
+    @GetMapping("/register")
     public String showForm(Model model) {
         Customer customer = new Customer();
         model.addAttribute("customer", customer);
         return "customer-form";
     }
-    
-    @Transactional
-    @PostMapping("/customers/save")
-    public String saveCustomer(@ModelAttribute Customer customer) {
-        customerService.saveCustomer(customer);
-        System.out.println("Customer: " + customer);  // Debug log
-        return "redirect:/customers/";
-    }
 
-    @GetMapping("/delete/{id}")
-    public String deleteCustomer(@PathVariable Long id) {
-        customerService.deleteCustomer(id);
-        return "redirect:/customers/";
-    }
-    
-    @GetMapping("/register")
-    public String register(Model model) {
-        model.addAttribute("customer", new Customer());
-        return "customer-form";
-    }
-    
-    //below is for user registration
     @Transactional
     @PostMapping("/register")
-    public String registerCustomer(@ModelAttribute Customer customer) {
-        userRegistrationService.registerCustomer(customer);
-        return "redirect:/login/";
+    public String regCustomer(@ModelAttribute Customer customer) {
+        customerService.saveCustomer(customer);
+        return "redirect:/login";
+    }
+
+    // Customer information edit
+    @GetMapping("/edit/{customer_id}")
+    public String showEditForm(@PathVariable Integer customer_id, Model model) {
+        model.addAttribute("customer", customerService.getCustomerById(customer_id));
+        return "customer-form";
+    }
+
+    @Transactional
+    @PostMapping("/save")
+    public String updateCustomer(@ModelAttribute Customer customer) {
+        customerService.saveCustomer(customer);
+        return "redirect:/cus_overview";
+    }
+
+    // Delete customer
+    @Transactional
+    @GetMapping("/delete/{id}")
+    public String deleteCustomer(@PathVariable Integer customer_id) {
+        customerService.deleteCustomer(customer_id);
+        return "redirect:/login";
     }
 }

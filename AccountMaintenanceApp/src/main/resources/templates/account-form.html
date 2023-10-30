@@ -5,19 +5,24 @@
 </head>
 <body>
     <h1>Create/Edit Account</h1>
-    <form th:action="@{/accounts/save}" th:object="${account}" method="post">
-        <input type="hidden" th:field="*{id}">
-        <label>Account Type:</label>
-        <input type="text" th:field="*{accountType}">
+    <form th:action="@{/acc_overview/save}" th:object="${account}" method="post">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+        <input type="hidden" th:field="*{accountNumber}">
+        <label for="accountType">Account Type:</label>
+		<select id="accountType" name="accountType" th:field="*{accountType}">
+		    <option th:value="CHK">Chequing</option>
+		    <option th:value="SAV">Savings</option>
+		    <option th:value="DEP">Deposit</option>
+		</select>
         <br>
         <label>Balance:</label>
         <input type="number" th:field="*{balance}">
         <br>
         <label>Overdraft Limit:</label>
-        <input type="checkbox" th:field="*{overDraftLimit}">
+        <input type="number" th:field="*{overDraftLimit}">
         <br>
         <input type="submit" value="Save">
     </form>
-    <a href="/accounts/">Back to List</a>
+    <a href="/cus_overview">Back to Customer Overview</a>
 </body>
 </html>
