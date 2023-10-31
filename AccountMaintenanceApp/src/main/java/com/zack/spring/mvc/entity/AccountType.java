@@ -2,33 +2,42 @@ package com.zack.spring.mvc.entity;
 
 
 import javax.validation.constraints.NotBlank;
-
 import jakarta.persistence.*;
 
 @Entity
 public class AccountType {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String accountTypeCode;
 
     @NotBlank
-    private String type;
+    private String accountTypeName;
+    
+    @NotBlank
+    private String accountTypeDesc;
 
     // Getters and Setters
-    public Long getId() {
-        return id;
+    public String getAccountTypeCode() {
+        return accountTypeCode;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAccountTypeCode(String accountTypeCode) {
+        this.accountTypeCode = accountTypeCode;
     }
 
-    public String getType() {
-        return type;
+    public String getAccountTypeName() {
+        return accountTypeName;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setAccountTypeName(String accountTypeName) {
+        this.accountTypeName = accountTypeName;
+    }
+    
+    public String getAccountTypeDesc() {
+        return accountTypeDesc;
+    }
+
+    public void setAccountTypeDesc(String accountTypeDesc) {
+        this.accountTypeDesc = accountTypeDesc;
     }
 }
 

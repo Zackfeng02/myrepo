@@ -9,17 +9,20 @@
     
 	<!-- Customer Information -->
     <h2>Personal Information</h2>
+		<div th:if="${customer != null}">
 		<p>ID: <span th:text="${customer.customerId}"></span></p>
 		<p>Username: <span th:text="${customer.username}"></span></p>
 		<p>Name: <span th:text="${customer.name}"></span></p>
 		<p>Email: <span th:text="${customer.email}"></span></p>
 		<p>Address: <span th:text="${customer.address}"></span></p>
-		<p>Phone Number: <span th:text="${customer.phone_number}"></span></p>
+		<p>Phone Number: <span th:text="${customer.phoneNumber}"></span></p>
 		<p>Actions: 
 					<a th:href="@{/cus_overview/view/{id}(id=${customer.customerId})}">View</a> |
 			        <a th:href="@{/cus_overview/edit/{id}(id=${customer.customerId})}">Edit</a> |
 			        <a th:href="@{/cus_overview/delete/{id}(id=${customer.customerId})}">Delete</a>
 		</p>
+		</div>
+		<p th:text="${customer}"></p>
     <a href="/register">Create New Customer</a>
 
     <!-- Account Information -->
@@ -35,9 +38,10 @@
             </tr>
         </thead>
         <tbody>
+			<div th:if="${customer != null}">
             <tr th:each="account : ${accounts}">
                 <td th:text="${account.accountNumber}"></td>
-                <td th:text="${account.accountTypeCode}"></td> <!-- Updated -->
+                <td th:text="${account.accountTypeCode}"></td>
                 <td th:text="${account.balance}"></td>
                 <td th:text="${account.overDraftLimit}"></td>
 			    <td>
@@ -46,6 +50,7 @@
 			        <a th:href="@{/acc_overview/delete/{id}(id=${account.accountNumber})}">Delete</a>
 			    </td>
             </tr>
+			</div>
         </tbody>
     </table>
     <a href="/acc_overview/new">Create New Account</a>

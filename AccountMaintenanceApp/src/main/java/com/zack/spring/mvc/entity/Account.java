@@ -42,8 +42,8 @@ public class Account {
         return accountTypeCode;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountTypeCode = accountType;
+    public void setAccountType(String accountTypeCode) {
+        this.accountTypeCode = accountTypeCode;
     }
 
     public Double getBalance() {

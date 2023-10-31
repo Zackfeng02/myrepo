@@ -22,7 +22,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> findByCustomerId(@Param("customerId") Long customerId);
     
 
-    // Delete: Custom query to delete accounts by account type
+    // Delete: Custom query to delete accounts by account type code
     @Transactional
     @Modifying
     @Query("DELETE FROM Account a WHERE a.accountTypeCode = :accountTypeCode")

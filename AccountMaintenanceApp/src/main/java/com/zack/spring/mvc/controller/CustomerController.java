@@ -37,31 +37,21 @@ public class CustomerController {
     @GetMapping("/")
     public String customerOverview(Model model, Principal principal) {
         String username = principal.getName();
+        System.out.println("object: " + username);
         
-        // Check if the username is null or empty
-        if (username != null && !username.isEmpty()) {
-            Customer customer = customerService.findByUsername(username);
-            
-            // Check if the customer object is null
-            if (customer != null) {
-                List<Account> accounts = accountService.getAccountById(customer.getCustomerId());
-                
-                // Check if the accounts list is null or empty
-                if (accounts != null && !accounts.isEmpty()) {
-                    model.addAttribute("customer", customer);
-                    model.addAttribute("accounts", accounts);
-                } else {
-                    // Handle the case where accounts are not found
-                    model.addAttribute("errorMessage", "No accounts found for this customer.");
-                }
+        Customer customer = customerService.findByUsername(username);
+        System.out.println("object: " + customer);
+        model.addAttribute("customer", customer);
+        
+        List<Account> accounts = accountService.getAccountById(customer.getCustomerId());
+        System.out.println("object: " + accounts);
+            // Check if the accounts list is null or empty
+            if (accounts != null && !accounts.isEmpty()) {
+                model.addAttribute("accounts", accounts);
             } else {
-                // Handle the case where the customer is not found
-                model.addAttribute("errorMessage", "Customer not found.");
-            }
-        } else {
-            // Handle the case where the username is not found
-            model.addAttribute("errorMessage", "Username not found.");
-        }
+                // Handle the case where accounts are not found
+                model.addAttribute("errorMessage", "No accounts found for this customer.");
+                }
         
         return "customer-overview";
     }
