@@ -1,0 +1,7 @@
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\net6.0\publish\StreamingServiceApp
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\net6.0\publish\appsettings.Development.json
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\net6.0\publish\appsettings.json
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\net6.0\publish\StreamingServiceApp.dll
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\net6.0\publish\StreamingServiceApp.deps.json
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\net6.0\publish\StreamingServiceApp.runtimeconfig.json
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\net6.0\publish\StreamingServiceApp.pdb
