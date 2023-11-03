@@ -1,0 +1,20 @@
+
+{
+    "region" : "us-east-1",
+    "configuration" : "Debug",
+    "framework"     : "net6.0",
+    "self-contained" : false,
+    "application"    : "StreamingServiceApp",
+    "environment"    : "StreamingServiceApp-dev",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-04e89009ff15e3c60\";\"aws:ec2:vpc,Subnets\"=\"subnet-053b88f56dfa85439\"",
+    "solution-stack"       : "64bit Amazon Linux 2 v2.6.0 running .NET Core",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "streamingserviceapp-dev",
+    "instance-type"        : "t2.micro",
+    "key-pair"             : "AWS-keypair1",
+    "instance-profile"     : "aws-elasticbeanstalk-ec2-role",
+    "service-role"         : "aws-elasticbeanstalk-service-role",
+    "proxy-server"         : "nginx"
+}
