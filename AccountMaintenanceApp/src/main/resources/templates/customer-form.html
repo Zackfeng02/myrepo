@@ -9,34 +9,34 @@
     <div class="container">
         <div th:insert="~{fragments :: navbar}"></div>
         <h1 class="mt-4 mb-3">Edit Customer Information</h1>
-        <form th:action="@{/cus_overview/save}" th:object="${customer}" method="post" class="mb-4">
+        <form th:action="@{/cus_overview/save}" th:object="${customer}" method="post" class="needs-validation" novalidate>
             <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
             <input type="hidden" th:field="*{customerId}">
             
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" th:field="*{username}" class="form-control" required minlength="1">
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" th:field="*{password}" class="form-control" required minlength="1">
-            </div>
-            
-            <div class="form-group">
-                <label for="firstname">First Name:</label>
-                <input type="text" th:field="*{firstname}" class="form-control" required minlength="2" maxlength="50">
-            </div>
-            
-            <div class="form-group">
-                <label for="lastname">Last Name:</label>
-                <input type="text" th:field="*{lastname}" class="form-control" required minlength="2" maxlength="50">
-            </div>
-            
-            <div class="form-group">
-                <label for="emailId">Email:</label>
-                <input type="email" th:field="*{emailId}" class="form-control" required>
-            </div>
+			<div class="form-group">
+		        <label for="username">Username:</label>
+		        <input type="text" id="username" th:field="*{username}" class="form-control" required minlength="1" maxlength="50">
+		    </div>
+		
+		    <div class="form-group">
+		        <label for="password">Password:</label>
+		        <input type="password" id="password" th:field="*{password}" class="form-control" required minlength="1" maxlength="50">
+		    </div>
+		
+		    <div class="form-group">
+		        <label for="firstname">First Name:</label>
+		        <input type="text" id="firstname" th:field="*{firstname}" class="form-control" required minlength="2" maxlength="50">
+		    </div>
+		
+		    <div class="form-group">
+		        <label for="lastname">Last Name:</label>
+		        <input type="text" id="lastname" th:field="*{lastname}" class="form-control" required minlength="2" maxlength="50">
+		    </div>
+		
+		    <div class="form-group">
+		        <label for="emailId">Email:</label>
+		        <input type="email" id="emailId" th:field="*{emailId}" class="form-control" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}">
+		    </div>
             
             <div class="form-group">
                 <label for="address">Address:</label>
@@ -48,15 +48,15 @@
                 <input type="text" th:field="*{city}" class="form-control" required>
             </div>
             
-            <div class="form-group">
-                <label for="postalcode">Postal Code:</label>
-                <input type="text" th:field="*{postalcode}" class="form-control" required minlength="5" maxlength="10">
-            </div>
-            
-            <div class="form-group">
-                <label for="phone">Phone Number:</label>
-                <input type="text" th:field="*{phone}" class="form-control" required minlength="10" maxlength="15">
-            </div>
+		    <div class="form-group">
+		        <label for="postalcode">Postal Code:</label>
+		        <input type="text" id="postalcode" th:field="*{postalcode}" class="form-control" required minlength="5" maxlength="10">
+		    </div>
+		
+		    <div class="form-group">
+		        <label for="phone">Phone Number:</label>
+		        <input type="text" id="phone" th:field="*{phone}" class="form-control" required minlength="10" maxlength="15">
+		    </div>
             
             <button type="submit" class="btn btn-primary">Save</button>
         </form>

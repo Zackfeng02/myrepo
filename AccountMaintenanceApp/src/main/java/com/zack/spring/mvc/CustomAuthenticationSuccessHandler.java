@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 import com.zack.spring.mvc.entity.Customer;
 import com.zack.spring.mvc.entity.Role;
 import com.zack.spring.mvc.repository.CustomerRepository;
-import com.zack.spring.mvc.repository.RoleRepository;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,7 +33,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
             // Check if the customer has the ADMIN role
             if (roles.stream().anyMatch(role -> "ADMIN".equals(role.getName()))) {
-                response.sendRedirect("/admin");
+                response.sendRedirect("/admin/");
                 return;
             }
         }

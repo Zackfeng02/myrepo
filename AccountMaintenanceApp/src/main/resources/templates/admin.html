@@ -3,36 +3,45 @@
 <head>
     <title>Admin Dashboard</title>
     <link rel="stylesheet" th:href="@{/styles.css}">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script th:src="@{/scripts.js}"></script>
 </head>
 <body>
-    <div th:insert="fragments :: navbar"></div>
-    <h1>Admin Dashboard</h1>
+    <div class="container">
+        <div th:insert="fragments :: navbar"></div>
+        <h1 class="mt-4 mb-4">Admin Dashboard</h1>
 
-    <!-- Count of Customers by Account Type -->
-    <h2>Count of Customers by Account Type</h2>
-    <ul>
-        <li th:each="entry : ${countByAccountType}">
-            <span th:text="${entry.key}"></span>: <span th:text="${entry.value}"></span>
-        </li>
-    </ul>
+        <!-- Count of Customers by Account Type -->
+        <h2 class="mt-4">Count of Customers by Account Type</h2>
+        <ul class="list-group mb-4">
+            <li class="list-group-item" th:each="entry : ${countByAccountType}">
+                <span th:text="${entry.key}"></span>: <span th:text="${entry.value}"></span>
+            </li>
+        </ul>
 
-    <!-- List of Customer Names with Savings Account Balance > $1000 -->
-    <h2>Customers with Savings Account Balance > $1000</h2>
-    <ul>
-        <li th:each="customer : ${customersWithHighBalance}">
-			ID: <span th:text="${customer.customerId}"></span> -
-            <span th:text="${customer.firstname} + ' ' + ${customer.lastname}"></span>
-        </li>
-    </ul>
+        <!-- List of Customer Names with Savings Account Balance > $1000 -->
+        <h2 class="mt-4">Customers with Savings Account Balance > $1000</h2>
+        <ul class="list-group mb-4">
+            <li class="list-group-item" th:each="customer : ${customersWithHighBalance}">
+			    ID: <span th:text="${customer.customerId}"></span> -
+                <span th:text="${customer.firstname} + ' ' + ${customer.lastname}"></span>
+            </li>
+        </ul>
 
-    <!-- List of Customer Names Who Opted for Overdraft Limit -->
-    <h2>Customers Who Opted for Overdraft Limit</h2>
-    <ul>
-        <li th:each="customer : ${customersWithOverdraft}">
-			ID: <span th:text="${customer.customerId}"></span> -
-            <span th:text="${customer.firstname} + ' ' + ${customer.lastname}"></span>
-        </li>
-    </ul>
+		<!-- List of Customer Names Who Opted for Overdraft Limit -->
+		<h2 class="mt-4">Customers Who Opted for Overdraft Limit</h2>
+		<ul class="list-group mb-4">
+		    <li class="list-group-item" th:each="customer : ${customersWithOverdraft}">
+		        ID: <span th:text="${customer.customerId}"></span> -
+		        Name: <span th:text="${customer.firstname} + ' ' + ${customer.lastname}"></span> -
+		        <ul>
+		            <li th:each="account : ${customer.accounts}">
+		                Account Number: <span th:text="${account.accountNumber}"></span> -
+		                Account Type: <span th:text="${account.accountTypeCode}"></span>
+		            </li>
+		        </ul>
+		    </li>
+		</ul>
+    </div>
 </body>
 </html>
