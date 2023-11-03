@@ -1,13 +1,17 @@
 ﻿using StreamingServiceApp.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StreamingServiceApp.DbData
 {
     public interface IMovieRepository
     {
-        IQueryable<Movie> Movies { get; }
+        Task<IEnumerable<Movie>> GetMoviesAsync();
 
-        void SaveMovie(Movie movie);
-        Movie DeleteMovie(int movieID);
-        Movie GetMovie(int id);
+        Task<Movie> GetMovieAsync(int id);
+
+        Task SaveMovieAsync(Movie movie);
+
+        Task<Movie> DeleteMovieAsync(int movieID);
     }
 }

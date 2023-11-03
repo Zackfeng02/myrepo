@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Amazon.DynamoDBv2;
 using StreamingServiceApp.DbData;
-using StreamingServiceApp.Models;
-
 
 namespace StreamingServiceApp
 {
@@ -16,18 +14,23 @@ namespace StreamingServiceApp
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
                 options.ConsentCookie.IsEssential = true;
             });
+
             services.AddControllersWithViews();
-            services.AddDbContext<MovieAppDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("MovieWebApp")));
-            services.AddTransient<IMovieRepository, EFMovieRepository>();
-            services.AddTransient<IUserRepository, EFUserRepository>();
+
+            // Registering the DynamoDB repositories
+            services.AddTransient<IMovieRepository, DynamoDBMovieRepository>();
+            services.AddTransient<IUserRepository, DynamoDBUserRepository>();
+
+            // Registering the DynamoDB client as a Singleton
+            var connection = new Connection();
+            var dynamoDbClient = connection.Connect();
+            services.AddSingleton<IAmazonDynamoDB>(dynamoDbClient);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -41,11 +44,10 @@ namespace StreamingServiceApp
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

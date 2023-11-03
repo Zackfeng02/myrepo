@@ -8,10 +8,10 @@ namespace StreamingServiceApp
     {
         public AmazonDynamoDBClient Connect()
         {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("AppSettings.json", optional: true, reloadOnChange: true);
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-            String accessKeyID = builder.Build().GetSection("AWSCredentials").GetSection("AccesskeyID").Value;
-            String secretKey = builder.Build().GetSection("AWSCredentials").GetSection("Secretaccesskey").Value;
+            String accessKeyID = builder.Build().GetSection("AWSCredentials").GetSection("AccessKeyID").Value;
+            String secretKey = builder.Build().GetSection("AWSCredentials").GetSection("SecretAccessKey").Value;
             var credentials = new BasicAWSCredentials(accessKeyID, secretKey);
 
             AmazonDynamoDBClient client = new AmazonDynamoDBClient(credentials, Amazon.RegionEndpoint.USEast1);
@@ -20,10 +20,10 @@ namespace StreamingServiceApp
 
         public AmazonS3Client ConnectS3()
         {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("AppSettings.json", optional: true, reloadOnChange: true);
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-            String accessKeyID = builder.Build().GetSection("AWSCredentials").GetSection("AccesskeyID").Value;
-            String secretKey = builder.Build().GetSection("AWSCredentials").GetSection("Secretaccesskey").Value;
+            String accessKeyID = builder.Build().GetSection("AWSCredentials").GetSection("AccessKeyID").Value;
+            String secretKey = builder.Build().GetSection("AWSCredentials").GetSection("SecretAccessKey").Value;
 
             AmazonS3Client client = new AmazonS3Client(accessKeyID, secretKey, Amazon.RegionEndpoint.USEast1);
             return client;
