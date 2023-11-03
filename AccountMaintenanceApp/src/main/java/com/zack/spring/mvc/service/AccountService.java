@@ -14,6 +14,10 @@ public class AccountService {
     public Account saveAccount(Account account) {
         return accountRepository.save(account);
     }
+    
+    public Account findByAccountNumber(Integer accountNumber) {
+        return accountRepository.selectByAccountNumber(accountNumber);
+    }
 
     public List<Account> getAllAccounts() {
         return accountRepository.findAll();
@@ -23,7 +27,7 @@ public class AccountService {
         return (List<Account>) accountRepository.findByCustomerId(customer_id);
     }
 
-    public void deleteAccount(Long id) {
-        accountRepository.deleteById(id);
+    public void deleteAccount(Integer accountNumber) {
+        accountRepository.deleteByAccountNumber(accountNumber);
     }
 }

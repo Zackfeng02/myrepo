@@ -3,16 +3,50 @@
 <head>
     <title>View Customer</title>
     <link rel="stylesheet" th:href="@{/styles.css}">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Customer Details</h1>
-    <p>ID: <span th:text="${customer.customerId}"></span></p>
-    <p>Username: <span th:text="${customer.username}"></span></p>
-    <p>Password: <span th:text="${customer.password}"></span></p>
-    <p>Name: <span th:text="${customer.name}"></span></p>
-    <p>Email: <span th:text="${customer.email}"></span></p>
-    <p>Address: <span th:text="${customer.address}"></span></p>
-    <p>Phone Number: <span th:text="${customer.phoneNumber}"></span></p>
-    <a href="/customers/">Back to List</a>
+    <div class="container">
+        <h1 class="mt-4 mb-3">Customer Details</h1>
+        <div class="mb-4">
+            <div class="row">
+                <div class="col-md-2 font-weight-bold">ID:</div>
+                <div class="col-md-10"><span th:text="${customer.customerId}"></span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 font-weight-bold">Username:</div>
+                <div class="col-md-10"><span th:text="${customer.username}"></span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 font-weight-bold">First Name:</div>
+                <div class="col-md-10"><span th:text="${customer.firstname}"></span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 font-weight-bold">Last Name:</div>
+                <div class="col-md-10"><span th:text="${customer.lastname}"></span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 font-weight-bold">Email:</div>
+                <div class="col-md-10"><span th:text="${customer.emailId}"></span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 font-weight-bold">Address:</div>
+                <div class="col-md-10"><span th:text="${customer.address}"></span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 font-weight-bold">Phone Number:</div>
+                <div class="col-md-10"><span th:text="${customer.phone}"></span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 font-weight-bold">Roles:</div>
+                <div class="col-md-10">
+                    <ul th:each="role : ${customer.roles}">
+                        <li th:text="${role.name}"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <a th:href="@{/cus_overview/}" class="btn btn-secondary">Back to Customer Overview</a>
+    </div>
 </body>
 </html>

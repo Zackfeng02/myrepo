@@ -26,12 +26,12 @@ public class CustomerService implements UserDetailsService {
         return customerRepository.findAll();
     }
 
-    public Customer getCustomerById(Integer customer_id) {
-        return customerRepository.findById(customer_id);
+    public Customer getCustomerById(Long customer_id) {
+        return customerRepository.findByCustomerId(customer_id);
     }
 
-    public void deleteCustomer(Integer customer_id) {
-        customerRepository.deleteById(customer_id);
+    public void deleteCustomer(Long customer_id) {
+        customerRepository.deleteByCustomerId(customer_id);
     }
 
     @Override
@@ -40,9 +40,13 @@ public class CustomerService implements UserDetailsService {
         if (customer == null) {
             throw new UsernameNotFoundException("User not found");
         }
+        
+     // Fetch role names from the customer entity
+        List<String> roleNames = customer.getRoleNames();
+        
         return User.withUsername(customer.getUsername())
                    .password(customer.getPassword())
-                   .roles("USER")
+                   .roles(roleNames.toArray(new String[0])) // Convert list to array
                    .build();
     }
 

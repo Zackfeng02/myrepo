@@ -28,6 +28,27 @@ public class AccountController {
         model.addAttribute("account", new Account());
         return "account-form";
     }
+    
+    // Account edit
+    @GetMapping("/edit/{accountNumber}")
+    public String showEditForm(@PathVariable("accountNumber") Integer accountNumber, Model model) {
+        // Fetch the account details from the database using the accountService
+        Account account = accountService.findByAccountNumber(accountNumber);
+        
+        // Check if the account exists
+        if (account == null) {
+            // Handle the case where the account doesn't exist. 
+            // This can be redirecting to an error page or the overview page with an error message.
+            return "redirect:/cus_overview?error=AccountNotFound";
+        }
+        
+        // Add the account details to the model
+        model.addAttribute("account", account);
+        
+        // Return the view name of the edit form
+        return "account-form";  // Assuming the same form is used for both creation and editing
+    }
+
 
     @Transactional
     @PostMapping("/save")
@@ -47,9 +68,9 @@ public class AccountController {
 
     // Account delete
     @Transactional
-    @GetMapping("/delete/{id}")
-    public String deleteAccount(@PathVariable Long id) {
-        accountService.deleteAccount(id);
+    @GetMapping("/delete/{accountNumber}")
+    public String deleteAccount(@PathVariable("accountNumber") Integer accountNumber) {
+        accountService.deleteAccount(accountNumber);
         return "redirect:/cus_overview";
     }
 }

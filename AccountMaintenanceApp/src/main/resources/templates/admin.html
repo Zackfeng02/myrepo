@@ -21,7 +21,8 @@
     <h2>Customers with Savings Account Balance > $1000</h2>
     <ul>
         <li th:each="customer : ${customersWithHighBalance}">
-            <span th:text="${customer.name}"></span>
+			ID: <span th:text="${customer.customerId}"></span> -
+            <span th:text="${customer.firstname} + ' ' + ${customer.lastname}"></span>
         </li>
     </ul>
 
@@ -29,7 +30,8 @@
     <h2>Customers Who Opted for Overdraft Limit</h2>
     <ul>
         <li th:each="customer : ${customersWithOverdraft}">
-            <span th:text="${customer.name}"></span>
+			ID: <span th:text="${customer.customerId}"></span> -
+            <span th:text="${customer.firstname} + ' ' + ${customer.lastname}"></span>
         </li>
     </ul>
 </body>

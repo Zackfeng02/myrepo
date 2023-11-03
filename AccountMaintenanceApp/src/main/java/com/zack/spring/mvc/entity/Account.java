@@ -38,11 +38,11 @@ public class Account {
         this.accountNumber = accountNumber;
     }
 
-    public String getAccountType() {
+    public String getAccountTypeCode() {
         return accountTypeCode;
     }
 
-    public void setAccountType(String accountTypeCode) {
+    public void setAccountTypeCode(String accountTypeCode) {
         this.accountTypeCode = accountTypeCode;
     }
 

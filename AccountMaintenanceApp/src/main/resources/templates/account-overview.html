@@ -3,9 +3,10 @@
 <head>
     <title>Account List</title>
     <link rel="stylesheet" th:href="@{/styles.css}">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-	<div th:insert="fragments :: navbar"></div>
+    <div th:insert="~{fragments :: navbar}"></div>
     <h1>Account List</h1>
     <table border="1">
         <thead>
@@ -31,6 +32,6 @@
             </tr>
         </tbody>
     </table>
-    <a href="/accounts/new">Create New Account</a>
+    <a th:href="@{/acc_overview/new}">Create New Account</a>
 </body>
 </html>

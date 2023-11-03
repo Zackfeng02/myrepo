@@ -28,9 +28,13 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query("DELETE FROM Account a WHERE a.accountTypeCode = :accountTypeCode")
     void deleteByAccountTypeCode(@Param("accountTypeCode") String accountTypeCode);
     
- // New query to delete account by account number
+    // New query to delete account by account number
     @Transactional
     @Modifying
     @Query("DELETE FROM Account a WHERE a.accountNumber = :accountNumber")
     void deleteByAccountNumber(@Param("accountNumber") Integer accountNumber);
+    
+    // New query to select account by account number
+    @Query("SELECT a FROM Account a WHERE a.accountNumber = :accountNumber")
+    Account selectByAccountNumber(@Param("accountNumber") Integer accountNumber);
 }
