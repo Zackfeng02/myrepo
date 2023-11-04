@@ -71,5 +71,16 @@ namespace StreamingServiceApp.DbData
                 { "ConfirmPassword", new AttributeValue { S = user.ConfirmPassword } }
             };
         }
+
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            var key = new Dictionary<string, AttributeValue>
+            {
+                { "Email", new AttributeValue { S = email } }
+            };
+            var item = await _dynamoDbHelper.GetItem(TableName, key);
+            return DynamoDBItemToUser(item);
+        }
+
     }
 }

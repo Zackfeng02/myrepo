@@ -26,6 +26,9 @@ namespace StreamingServiceApp
             // Registering the DynamoDB repositories
             services.AddTransient<IMovieRepository, DynamoDBMovieRepository>();
             services.AddTransient<IUserRepository, DynamoDBUserRepository>();
+            services.AddTransient<IReviewRepository, DynamoDBReviewRepository>();
+            services.AddTransient<MovieReviewService>();
+
 
             // Registering the DynamoDB client as a Singleton
             var connection = new Connection();
