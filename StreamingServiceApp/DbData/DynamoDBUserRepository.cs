@@ -9,7 +9,7 @@ namespace StreamingServiceApp.DbData
     public class DynamoDBUserRepository : IUserRepository
     {
         private readonly DynamoDBHelper _dynamoDbHelper;
-        private const string TableName = "Users"; // Assuming your DynamoDB table name is "Users"
+        private const string TableName = "StreamingServiceData"; // Updated table name
 
         public DynamoDBUserRepository()
         {
@@ -20,7 +20,7 @@ namespace StreamingServiceApp.DbData
 
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
-            var items = await _dynamoDbHelper.ScanTable(TableName);
+            var items = await _dynamoDbHelper.ScanTable(TableName, "Type = :type", new Dictionary<string, AttributeValue> { { ":type", new AttributeValue("User") } });
             return items.Select(DynamoDBItemToUser);
         }
 
@@ -33,7 +33,8 @@ namespace StreamingServiceApp.DbData
         {
             var key = new Dictionary<string, AttributeValue>
             {
-                { "Email", new AttributeValue { S = email } }
+                { "PK", new AttributeValue($"USER#{email}") },
+                { "SK", new AttributeValue("DETAILS") }
             };
             var item = await _dynamoDbHelper.GetItem(TableName, key);
             return DynamoDBItemToUser(item);
@@ -65,6 +66,9 @@ namespace StreamingServiceApp.DbData
         {
             return new Dictionary<string, AttributeValue>
             {
+                { "PK", new AttributeValue($"USER#{user.Email}") },
+                { "SK", new AttributeValue("DETAILS") },
+                { "Type", new AttributeValue("User") },
                 { "UserId", new AttributeValue { N = user.UserId.ToString() } },
                 { "Email", new AttributeValue { S = user.Email } },
                 { "Password", new AttributeValue { S = user.Password } },
@@ -76,11 +80,11 @@ namespace StreamingServiceApp.DbData
         {
             var key = new Dictionary<string, AttributeValue>
             {
-                { "Email", new AttributeValue { S = email } }
+                { "PK", new AttributeValue($"USER#{email}") },
+                { "SK", new AttributeValue("DETAILS") }
             };
             var item = await _dynamoDbHelper.GetItem(TableName, key);
             return DynamoDBItemToUser(item);
         }
-
     }
 }

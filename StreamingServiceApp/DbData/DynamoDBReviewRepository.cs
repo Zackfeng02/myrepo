@@ -1,5 +1,4 @@
 ﻿using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.Model;
 using StreamingServiceApp.Models;
 using System;
@@ -12,7 +11,7 @@ namespace StreamingServiceApp.DbData
     public class DynamoDBReviewRepository : IReviewRepository
     {
         private readonly DynamoDBHelper _dynamoDbHelper;
-        private const string TableName = "Reviews";
+        private const string TableName = "StreamingServiceData"; // Adjusted to the single table name
 
         public DynamoDBReviewRepository()
         {
@@ -21,10 +20,11 @@ namespace StreamingServiceApp.DbData
 
         public async Task<IEnumerable<Review>> GetReviewsByMovieIdAsync(int movieId)
         {
-            var keyConditionExpression = "MovieId = :movieId";
+            var keyConditionExpression = "PK = :pk AND begins_with(SK, :sk)";
             var expressionAttributeValues = new Dictionary<string, AttributeValue>
             {
-                { ":movieId", new AttributeValue { N = movieId.ToString() } }
+                { ":pk", new AttributeValue { S = $"MOVIE#{movieId}" } },
+                { ":sk", new AttributeValue { S = "REVIEW#" } }
             };
 
             var items = await _dynamoDbHelper.QueryTable(TableName, keyConditionExpression, expressionAttributeValues);
@@ -41,13 +41,15 @@ namespace StreamingServiceApp.DbData
         {
             return new Dictionary<string, AttributeValue>
             {
+                { "PK", new AttributeValue { S = $"MOVIE#{review.MovieId}" } },
+                { "SK", new AttributeValue { S = $"REVIEW#{review.ReviewID}" } },
                 { "ReviewID", new AttributeValue { S = review.ReviewID } },
                 { "Title", new AttributeValue { S = review.Title } },
                 { "ReviewDescription", new AttributeValue { S = review.ReviewDescription } },
-                { "MovieId", new AttributeValue { N = review.MovieId.ToString() } },
                 { "MovieRating", new AttributeValue { N = review.MovieRating.ToString() } },
-                { "UserEmail", new AttributeValue { S = review.UserEmail } }
-                // ... add other properties as needed
+                { "UserEmail", new AttributeValue { S = review.UserEmail } },
+                // Assuming MovieId is needed as a separate attribute for some operations
+                { "MovieId", new AttributeValue { N = review.MovieId.ToString() } }
             };
         }
 
@@ -61,7 +63,7 @@ namespace StreamingServiceApp.DbData
                 MovieId = int.Parse(item["MovieId"].N),
                 MovieRating = int.Parse(item["MovieRating"].N),
                 UserEmail = item["UserEmail"].S
-                // ... add other properties as needed
+                // The Movie property is not populated here. If needed, you'd fetch it separately.
             };
         }
     }

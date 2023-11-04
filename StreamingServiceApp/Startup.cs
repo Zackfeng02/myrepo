@@ -59,6 +59,8 @@ namespace StreamingServiceApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            SeedData.InitializeAsync().Wait();
         }
     }
 }

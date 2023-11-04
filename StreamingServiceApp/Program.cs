@@ -1,20 +1,10 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using StreamingServiceApp.DbData;
-using StreamingServiceApp.Models;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace StreamingServiceApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
 
@@ -24,7 +14,7 @@ namespace StreamingServiceApp
 
                 try
                 {
-                    SeedData.Initialize(services);
+                    await SeedData.InitializeAsync();
                 }
                 catch (Exception ex)
                 {
@@ -34,7 +24,6 @@ namespace StreamingServiceApp
             }
 
             host.Run();
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

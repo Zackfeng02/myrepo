@@ -1,14 +1,21 @@
 ﻿using StreamingServiceApp.Models;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
-using System;
-using System.Collections.Generic;
+
 
 namespace StreamingServiceApp.DbData
 {
     public class SeedData
     {
-        private static AmazonDynamoDBClient _client = new AmazonDynamoDBClient();
+        private static AmazonDynamoDBClient _client;
+
+        static SeedData()
+        {
+            // Create an instance of the Connection class
+            var connection = new Connection();
+            // Use the Connect method to get an instance of the AmazonDynamoDBClient
+            _client = connection.Connect();
+        }
 
         public static async Task InitializeAsync()
         {
@@ -29,7 +36,7 @@ namespace StreamingServiceApp.DbData
                     Rating = 3,
                     FilePath = "",
                     Description = "James Bond is enjoying a tranquil life in Jamaica after leaving active service. However, his peace is short-lived as his old CIA friend, Felix Leiter, shows up and asks for help.",
-                    ImageUrl = "https://m.media-amazon.com/images/I/616x9pOCRTL._AC_SY355_.jpg"
+                    ImageUrl = "https://m.media-amazon.com/images/I/616x9pOCRTL._AC_SY355_.jpg",
                 },
                 new Movie
                 {
@@ -49,6 +56,7 @@ namespace StreamingServiceApp.DbData
                     ReleaseDate = DateTime.Parse("2020-7-10"),
                     Genre = Genre.ACTION,
                     Rating = 3,
+                    FilePath = "",
                     Description = "U.S. Navy Cmdr. Ernest Krause is assigned to lead an Allied convoy across the Atlantic during World War II. His convoy, however, is pursued by German U-boats",
                     ImageUrl = "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRqGlJ1E_dsszf-lreRdhk3LiSe9gK1SBzNnw63UIxXiyveYR4I"
                 },
@@ -71,18 +79,20 @@ namespace StreamingServiceApp.DbData
             {
                 var request = new PutItemRequest
                 {
-                    TableName = "Movies",
+                    TableName = "StreamingServiceData",
                     Item = new Dictionary<string, AttributeValue>
                     {
+                        { "PK", new AttributeValue($"MOVIE#{movie.MovieId}") },
+                        { "SK", new AttributeValue("DETAILS") },
+                        { "Type", new AttributeValue("Movie") },
                         { "MovieId", new AttributeValue { N = movie.MovieId.ToString() } },
                         { "MovieName", new AttributeValue { S = movie.MovieName } },
                         { "ReleaseDate", new AttributeValue { S = movie.ReleaseDate.ToString("o") } },
                         { "Genre", new AttributeValue { S = movie.Genre.ToString() } },
                         { "Rating", new AttributeValue { N = movie.Rating.ToString() } },
-                        { "FilePath", new AttributeValue { S = movie.FilePath } },
+                        //{ "FilePath", new AttributeValue { S = movie.FilePath } },
                         { "Description", new AttributeValue { S = movie.Description } },
                         { "ImageUrl", new AttributeValue { S = movie.ImageUrl } },
-                        { "UserEmail", new AttributeValue { S = movie.User?.Email ?? "" } }
                     }
                 };
                 await _client.PutItemAsync(request);
@@ -112,12 +122,15 @@ namespace StreamingServiceApp.DbData
             {
                 var request = new PutItemRequest
                 {
-                    TableName = "Users",
+                    TableName = "StreamingServiceData",
                     Item = new Dictionary<string, AttributeValue>
                     {
-                        { "Email", new AttributeValue { S = user.Email } },
-                        { "Password", new AttributeValue { S = user.Password } },
-                        { "ConfirmPassword", new AttributeValue { S = user.ConfirmPassword } }
+                        { "PK", new AttributeValue($"USER#{user.Email}") },
+                        { "SK", new AttributeValue("DETAILS") },
+                        { "Type", new AttributeValue("User") },
+                        { "Email", new AttributeValue(user.Email) },
+                        { "Password", new AttributeValue(user.Password) },
+                        { "ConfirmPassword", new AttributeValue(user.ConfirmPassword) }
                     }
                 };
                 await _client.PutItemAsync(request);

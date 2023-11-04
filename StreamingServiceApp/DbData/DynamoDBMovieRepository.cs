@@ -9,7 +9,7 @@ namespace StreamingServiceApp.DbData
     public class DynamoDBMovieRepository : IMovieRepository
     {
         private readonly DynamoDBHelper _dynamoDbHelper;
-        private const string TableName = "Movies"; // Assuming your DynamoDB table name is "Movies"
+        private const string TableName = "StreamingServiceData";
 
         public DynamoDBMovieRepository()
         {
@@ -18,7 +18,14 @@ namespace StreamingServiceApp.DbData
 
         public async Task<IEnumerable<Movie>> GetMoviesAsync()
         {
-            var items = await _dynamoDbHelper.ScanTable(TableName);
+            var filterExpression = "begins_with(PK, :pk) AND SK = :sk";
+            var expressionAttributeValues = new Dictionary<string, AttributeValue>
+            {
+                { ":pk", new AttributeValue { S = "MOVIE#" } },
+                { ":sk", new AttributeValue { S = "DETAILS" } }
+            };
+
+            var items = await _dynamoDbHelper.ScanTable(TableName, filterExpression, expressionAttributeValues);
             return items.Select(DynamoDBItemToMovie);
         }
 
@@ -26,7 +33,8 @@ namespace StreamingServiceApp.DbData
         {
             var key = new Dictionary<string, AttributeValue>
             {
-                { "MovieId", new AttributeValue { N = id.ToString() } }
+                { "PK", new AttributeValue { S = $"MOVIE#{id}" } },
+                { "SK", new AttributeValue { S = "DETAILS" } }
             };
             var item = await _dynamoDbHelper.GetItem(TableName, key);
             return DynamoDBItemToMovie(item);
@@ -42,7 +50,8 @@ namespace StreamingServiceApp.DbData
         {
             var key = new Dictionary<string, AttributeValue>
             {
-                { "MovieId", new AttributeValue { N = movieID.ToString() } }
+                { "PK", new AttributeValue { S = $"MOVIE#{movieID}" } },
+                { "SK", new AttributeValue { S = "DETAILS" } }
             };
 
             // get the item you want to delete
@@ -58,6 +67,8 @@ namespace StreamingServiceApp.DbData
         {
             return new Dictionary<string, AttributeValue>
             {
+                { "PK", new AttributeValue { S = $"MOVIE#{movie.MovieId}" } },
+                { "SK", new AttributeValue { S = "DETAILS" } },
                 { "MovieId", new AttributeValue { N = movie.MovieId.ToString() } },
                 { "MovieName", new AttributeValue { S = movie.MovieName } },
                 { "Genre", new AttributeValue { S = movie.Genre.ToString() } },
@@ -66,7 +77,6 @@ namespace StreamingServiceApp.DbData
                 { "Rating", new AttributeValue { N = movie.Rating.ToString() } },
                 { "FilePath", new AttributeValue { S = movie.FilePath } },
                 { "ImageUrl", new AttributeValue { S = movie.ImageUrl } },
-                { "UserEmail", new AttributeValue { S = movie.User?.Email ?? "" } } // Assuming User has an Email property
             };
         }
 
@@ -82,9 +92,7 @@ namespace StreamingServiceApp.DbData
                 Rating = double.Parse(item["Rating"].N),
                 FilePath = item["FilePath"].S,
                 ImageUrl = item["ImageUrl"].S,
-                User = new User { Email = item["UserEmail"].S } // Assuming User has an Email property
             };
         }
-
     }
 }

@@ -16,11 +16,16 @@ namespace StreamingServiceApp.DbData
             _dynamoDbClient = connection.Connect();
         }
 
-        public async Task<List<Dictionary<string, AttributeValue>>> ScanTable(string tableName)
+        public async Task<List<Dictionary<string, AttributeValue>>> ScanTable(string tableName, string filterExpression, Dictionary<string, AttributeValue> expressionAttributeValues)
         {
             try
             {
-                var request = new ScanRequest { TableName = tableName };
+                var request = new ScanRequest
+                {
+                    TableName = tableName,
+                    FilterExpression = filterExpression,
+                    ExpressionAttributeValues = expressionAttributeValues
+                };
                 var response = await _dynamoDbClient.ScanAsync(request);
                 return response.Items;
             }
@@ -35,6 +40,7 @@ namespace StreamingServiceApp.DbData
                 return new List<Dictionary<string, AttributeValue>>();
             }
         }
+
 
         public async Task<Dictionary<string, AttributeValue>> GetItem(string tableName, Dictionary<string, AttributeValue> key)
         {
