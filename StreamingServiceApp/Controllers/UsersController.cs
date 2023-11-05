@@ -1,20 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StreamingServiceApp.DbData;
 using StreamingServiceApp.Models;
+using StreamingServiceApp.DbData;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Security.Cryptography;
 
 namespace StreamingServiceApp.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly DynamoDBUserRepository _userRepository;
+        private readonly AppDbContext _context;
 
-        public UsersController(DynamoDBUserRepository userRepository)
+        public UsersController(AppDbContext context)
         {
-            _userRepository = userRepository;
+            _context = context;
         }
 
         [HttpGet]
-        public ViewResult Signin()
+        public IActionResult Signin()
         {
             return View();
         }
@@ -22,16 +25,22 @@ namespace StreamingServiceApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Signin(User userLogin)
         {
-            var user = await _userRepository.GetUserByEmailAsync(userLogin.Email);
-            TempData["UserId"] = user.UserId;
-            TempData["UserEmail"] = user.Email;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userLogin.Email);
             if (user == null)
             {
                 TempData["LoginError"] = $"{userLogin.Email} does not exist";
                 return View(userLogin);
             }
+            if (!VerifyPassword(user.Password, userLogin.Password))
+            {
+                TempData["LoginError"] = "Incorrect password";
+                return View(userLogin);
+            }
+            TempData["UserId"] = user.UserId;
+            TempData["UserEmail"] = user.Email;
             return RedirectToAction("Index", "Movies");
         }
+
 
         [HttpGet]
         public IActionResult Signup()
@@ -41,14 +50,55 @@ namespace StreamingServiceApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Signup(User user)
+        public async Task<IActionResult> Signup(User model)
         {
             if (ModelState.IsValid)
             {
-                await _userRepository.SaveUserAsync(user);
+                var user = new User
+                {
+                    Email = model.Email,
+                    Password = HashPassword(model.Password)
+                };
+
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction("Signin");
             }
-            return View(user);
+            return View(model);
         }
+
+        private string HashPassword(string password)
+        {
+            byte[] salt = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+            return $"{Convert.ToBase64String(salt)}:{hashed}";
+        }
+
+        private bool VerifyPassword(string hashedPasswordWithSalt, string passwordToVerify)
+        {
+            var parts = hashedPasswordWithSalt.Split(':');
+            var salt = Convert.FromBase64String(parts[0]);
+            var passwordHash = parts[1];
+
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: passwordToVerify,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+
+            return passwordHash == hashed;
+        }
+
     }
 }

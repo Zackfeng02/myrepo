@@ -1,4 +1,5 @@
 ﻿using Amazon.DynamoDBv2;
+using Microsoft.EntityFrameworkCore;
 using StreamingServiceApp.DbData;
 
 namespace StreamingServiceApp
@@ -29,11 +30,14 @@ namespace StreamingServiceApp
             services.AddTransient<IReviewRepository, DynamoDBReviewRepository>();
             services.AddTransient<MovieReviewService>();
 
-
             // Registering the DynamoDB client as a Singleton
             var connection = new Connection();
             var dynamoDbClient = connection.Connect();
             services.AddSingleton<IAmazonDynamoDB>(dynamoDbClient);
+
+            // Registering the AppDbContext for SQL Server
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -60,6 +64,7 @@ namespace StreamingServiceApp
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            // Initialize seed data for DynamoDB
             SeedData.InitializeAsync().Wait();
         }
     }
