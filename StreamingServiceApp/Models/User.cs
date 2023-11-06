@@ -12,8 +12,5 @@ namespace StreamingServiceApp.Models
         [Required(ErrorMessage = "Password is required")]
         [UIHint("password")]
         public string Password { get; set; }
-        [Required(ErrorMessage = "Confirm Password is required")]
-        [UIHint("password")]
-        public string ConfirmPassword { get; set; }
     }
 }

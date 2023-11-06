@@ -1,4 +1,4 @@
-﻿using StreamingServiceApp.Models;
+﻿ using StreamingServiceApp.Models;
 using Amazon.DynamoDBv2.Model;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +58,6 @@ namespace StreamingServiceApp.DbData
                 UserId = int.Parse(item["UserId"].N),
                 Email = item["Email"].S,
                 Password = item["Password"].S,
-                ConfirmPassword = item["ConfirmPassword"].S
             };
         }
 
@@ -72,7 +71,6 @@ namespace StreamingServiceApp.DbData
                 { "UserId", new AttributeValue { N = user.UserId.ToString() } },
                 { "Email", new AttributeValue { S = user.Email } },
                 { "Password", new AttributeValue { S = user.Password } },
-                { "ConfirmPassword", new AttributeValue { S = user.ConfirmPassword } }
             };
         }
 

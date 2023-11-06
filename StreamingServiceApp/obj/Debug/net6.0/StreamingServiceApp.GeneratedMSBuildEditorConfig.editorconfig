@@ -40,6 +40,26 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/fengz/source/repos/StreamingServiceApp/StreamingServiceApp/Views/EFUserRepository/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRUZVc2VyUmVwb3NpdG9yeVxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fengz/source/repos/StreamingServiceApp/StreamingServiceApp/Views/EFUserRepository/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRUZVc2VyUmVwb3NpdG9yeVxEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fengz/source/repos/StreamingServiceApp/StreamingServiceApp/Views/EFUserRepository/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRUZVc2VyUmVwb3NpdG9yeVxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fengz/source/repos/StreamingServiceApp/StreamingServiceApp/Views/EFUserRepository/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRUZVc2VyUmVwb3NpdG9yeVxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/fengz/source/repos/StreamingServiceApp/StreamingServiceApp/Views/EFUserRepository/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRUZVc2VyUmVwb3NpdG9yeVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/fengz/source/repos/StreamingServiceApp/StreamingServiceApp/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

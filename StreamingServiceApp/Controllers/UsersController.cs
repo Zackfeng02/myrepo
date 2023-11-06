@@ -4,6 +4,7 @@ using StreamingServiceApp.DbData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
+using StreamingServiceApp.ViewModel;
 
 namespace StreamingServiceApp.Controllers
 {
@@ -45,17 +46,18 @@ namespace StreamingServiceApp.Controllers
         [HttpGet]
         public IActionResult Signup()
         {
-            return View();
+            return View(new UserViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Signup(User model)
+        public async Task<IActionResult> Signup(UserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new User
+                User user = new User
                 {
+                    UserId = model.UserId,
                     Email = model.Email,
                     Password = HashPassword(model.Password)
                 };

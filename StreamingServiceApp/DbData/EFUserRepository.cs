@@ -1,42 +1,47 @@
-﻿using StreamingServiceApp.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using StreamingServiceApp.Models;
 
 namespace StreamingServiceApp.DbData
 {
     public class EFUserRepository : IUserRepository
     {
-        private MovieAppDbContext context;
+        private readonly AppDbContext _context;
 
-        public EFUserRepository(MovieAppDbContext ctx)
+        public EFUserRepository(AppDbContext context)
         {
-            context = ctx;
-        }
-        public IQueryable<User> Users => context.Users;
-
-        public User GetUserMovies(string email)
-        {
-            User dbEntry = context.Users
-                .FirstOrDefault(u => u.Email == email);
-            return dbEntry;
+            _context = context;
         }
 
-        public void SaveUser(User user)
+        public async Task<IEnumerable<User>> GetUsersAsync()
+        {
+            return await _context.Users.ToListAsync();
+        }
+
+        public async Task<User?> GetUserMoviesAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task SaveUserAsync(User user)
         {
             if (user.UserId == 0)
             {
-                context.Users.Add(user);
+                _context.Users.Add(user);
             }
             else
             {
-                User dbEntry = context.Users
-                   .FirstOrDefault(u => u.UserId == user.UserId);
+                User dbEntry = await _context.Users.FirstOrDefaultAsync(u => u.UserId == user.UserId);
                 if (dbEntry != null)
                 {
                     dbEntry.Email = user.Email;
                     dbEntry.Password = user.Password;
-                    dbEntry.ConfirmPassword = user.ConfirmPassword;
                 }
             }
-            context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }
