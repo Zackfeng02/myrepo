@@ -13,5 +13,7 @@ namespace StreamingServiceApp.DbData
         Task SaveMovieAsync(Movie movie);
 
         Task<Movie> DeleteMovieAsync(int movieID);
+
+        Task UpdateMovieAsync(Movie movie);
     }
 }

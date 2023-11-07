@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 using StreamingServiceApp.ViewModel;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace StreamingServiceApp.Controllers
 {
@@ -37,8 +40,20 @@ namespace StreamingServiceApp.Controllers
                 TempData["LoginError"] = "Incorrect password";
                 return View(userLogin);
             }
-            TempData["UserId"] = user.UserId;
-            TempData["UserEmail"] = user.Email;
+            // Create the security claims with user information
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.Name, user.Email)
+            };
+
+            // Create the claims identity
+            var claimsIdentity = new ClaimsIdentity(claims, "CookieAuthenticationDefaults");
+
+            // Sign in the user
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+
             return RedirectToAction("Index", "Movies");
         }
 

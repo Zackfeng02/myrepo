@@ -11,7 +11,7 @@ namespace StreamingServiceApp.Models
 
         [Required(ErrorMessage = "Movie Name is required")]
         public string MovieName { get; set; }
-        public User User { get; set; }
+        public int UserId { get; set; }
         public string Description { get; set; }
         [DataType(DataType.Date)]
         public DateTime ReleaseDate { get; set; }

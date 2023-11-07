@@ -59,5 +59,12 @@
                 <button type="submit" class="btn btn-danger my-2">Save</button>
             </div>
         </form>
+        @if (TempData["ErrorMessages"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessages"]
+            </div>
+        }
+
     </div>
 </div>

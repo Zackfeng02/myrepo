@@ -13,12 +13,14 @@ namespace StreamingServiceApp.Controllers
         private readonly IReviewRepository _reviewRepository;
         private readonly IMovieRepository _movieRepository;
         private List<Review> reviewList;
+        private readonly IUserService _userService;
 
-        public ReviewsController(IReviewRepository reviewRepo, IMovieRepository movieRepo)
+        public ReviewsController(IReviewRepository reviewRepo, IMovieRepository movieRepo, IUserService userService)
         {
             _reviewRepository = reviewRepo;
             _movieRepository = movieRepo;
             reviewList = new List<Review>();
+            _userService = userService;
         }
 
         public async Task<IActionResult> ReviewsList(int movieId)
@@ -28,9 +30,9 @@ namespace StreamingServiceApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddReview(int id)
+        public async Task<IActionResult> AddReview(int id)
         {
-            Movie movie = _movieRepository.GetMovieAsync(id).Result;
+            Movie movie = await _movieRepository.GetMovieAsync(id);
             if (movie != null)
             {
                 MovieReview mrm = new MovieReview()
@@ -50,15 +52,33 @@ namespace StreamingServiceApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddReview(MovieReview movieReview)
         {
-            if (ModelState.IsValid)
+            // Retrieve the current user
+            var currentUser = await _userService.GetCurrentUserAsync();
+            if (currentUser == null)
             {
-                movieReview.Review.MovieId = movieReview.MovieId;
-                TempData["ReviewMovieId"] = movieReview.MovieId;
-                await _reviewRepository.SaveReviewAsync(movieReview.Review);
-                return RedirectToAction("ReviewsList", new { movieId = movieReview.MovieId });
+                // If no user is logged in, add an error to the ModelState and return the view
+                ModelState.AddModelError(string.Empty, "User must be logged in to add a review.");
+                return View(movieReview);
             }
-            return View(movieReview);
+
+            // Generate a new ReviewID if it's not already set
+            if (string.IsNullOrEmpty(movieReview.Review.ReviewID))
+            {
+                movieReview.Review.ReviewID = Guid.NewGuid().ToString();
+            }
+
+            // Bind the current user's ID to the review
+            movieReview.Review.UserEmail = currentUser.Email;
+
+            // Save the review to the database
+            await _reviewRepository.SaveReviewAsync(movieReview.Review);
+
+            // Redirect to the ReviewsList action for the current movie
+            return RedirectToAction("ReviewsList", new { movieId = movieReview.MovieId });
+           
         }
+
+
 
         public async Task<IActionResult> GetReviews(int id)
         {

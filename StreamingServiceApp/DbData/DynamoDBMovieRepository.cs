@@ -94,5 +94,43 @@ namespace StreamingServiceApp.DbData
                 ImageUrl = item["ImageUrl"].S,
             };
         }
+
+        public async Task<IEnumerable<Movie>> GetMoviesByGenreAsync(Genre genre)
+        {
+            var filterExpression = "begins_with(PK, :pk) AND SK = :sk AND Genre = :genre";
+            var expressionAttributeValues = new Dictionary<string, AttributeValue>
+            {
+                { ":pk", new AttributeValue { S = "MOVIE#" } },
+                { ":sk", new AttributeValue { S = "DETAILS" } },
+                { ":genre", new AttributeValue { S = genre.ToString() } }
+            };
+
+            var items = await _dynamoDbHelper.ScanTable(TableName, filterExpression, expressionAttributeValues);
+            return items.Select(DynamoDBItemToMovie);
+        }
+
+
+        public async Task UpdateMovieAsync(Movie movie)
+        {
+            // Assuming that the movie.MovieId is the primary key for the movie item
+            var key = new Dictionary<string, AttributeValue>
+            {
+                { "PK", new AttributeValue { S = $"MOVIE#{movie.MovieId}" } },
+                { "SK", new AttributeValue { S = "DETAILS" } }
+            };
+
+            var updatedAttributes = new Dictionary<string, AttributeValueUpdate>();
+
+            // Convert Movie object to AttributeValueUpdate for each property
+            updatedAttributes["MovieName"] = new AttributeValueUpdate(new AttributeValue { S = movie.MovieName }, "PUT");
+            updatedAttributes["Genre"] = new AttributeValueUpdate(new AttributeValue { S = movie.Genre.ToString() }, "PUT");
+            updatedAttributes["Description"] = new AttributeValueUpdate(new AttributeValue { S = movie.Description }, "PUT");
+            updatedAttributes["ReleaseDate"] = new AttributeValueUpdate(new AttributeValue { S = movie.ReleaseDate.ToString("o") }, "PUT");
+            updatedAttributes["Rating"] = new AttributeValueUpdate(new AttributeValue { N = movie.Rating.ToString() }, "PUT");
+            updatedAttributes["FilePath"] = new AttributeValueUpdate(new AttributeValue { S = movie.FilePath }, "PUT");
+            updatedAttributes["ImageUrl"] = new AttributeValueUpdate(new AttributeValue { S = movie.ImageUrl }, "PUT");
+
+            await _dynamoDbHelper.UpdateItem(TableName, key, updatedAttributes);
+        }
     }
 }

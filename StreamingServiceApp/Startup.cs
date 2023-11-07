@@ -1,4 +1,5 @@
 ﻿using Amazon.DynamoDBv2;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using StreamingServiceApp.DbData;
 
@@ -38,6 +39,17 @@ namespace StreamingServiceApp
             // Registering the AppDbContext for SQL Server
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            // Get the current user service
+            services.AddHttpContextAccessor();
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Users/Signin"; // Your login path
+                options.LogoutPath = "/Users/Signout"; // Your logout path
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -55,6 +67,7 @@ namespace StreamingServiceApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
