@@ -101,5 +101,37 @@ namespace StreamingServiceApp.Controllers
                 }
             }
         }
+
+        public async Task<IActionResult> EditReview(string id)
+        {
+            var review = await _reviewRepository.GetReviewByIdAsync(id);
+            if (review == null || review.UserEmail != User.Identity.Name || (DateTime.Now - review.CreatedAt).TotalHours > 48)
+            {
+                return NotFound();
+            }
+            return View(review);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditReview(Review review)
+        {
+            if (ModelState.IsValid)
+            {
+                await _reviewRepository.UpdateReviewAsync(review);
+                return RedirectToAction("ReviewsList", new { movieId = review.MovieId });
+            }
+            return View(review);
+        }
+
+        public async Task<IActionResult> DeleteReview(string id)
+        {
+            var review = await _reviewRepository.GetReviewByIdAsync(id);
+            if (review == null || review.UserEmail != User.Identity.Name || (DateTime.Now - review.CreatedAt).TotalHours > 48)
+            {
+                return NotFound();
+            }
+            await _reviewRepository.DeleteReviewAsync(id);
+            return RedirectToAction("ReviewsList", new { movieId = review.MovieId });
+        }
     }
 }

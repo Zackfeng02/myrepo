@@ -16,5 +16,7 @@ namespace StreamingServiceApp.Models
         public int MovieRating { get; set; }
         public Movie Movie { get; set; }
         public string UserEmail { get; set; }
+        public DateTime CreatedAt { get; set; }
+
     }
 }

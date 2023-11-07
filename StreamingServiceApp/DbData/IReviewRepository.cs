@@ -8,6 +8,8 @@ namespace StreamingServiceApp.DbData
     {
         Task<IEnumerable<Review>> GetReviewsByMovieIdAsync(int movieId);
         Task SaveReviewAsync(Review review);
-
+        Task<Review> GetReviewByIdAsync(string reviewId);
+        Task UpdateReviewAsync(Review review);
+        Task DeleteReviewAsync(string reviewId);
     }
 }

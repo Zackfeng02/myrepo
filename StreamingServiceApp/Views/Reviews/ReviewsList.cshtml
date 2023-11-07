@@ -20,27 +20,24 @@
         }
         else
         {
-            @foreach (var review in Model)
+            foreach (var review in Model)
             {
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title" style="float:right">
                             Movie Rating:
-                            @if (Model.ToList().Count > 0)
-                            {
-                                @review.MovieRating
-                            }
-                            else
-                            {
-                                @: Be the first to add Rating!
-                            }
+                            @review.MovieRating
                         </h6>
                         <h5 class="card-title">@review.Title</h5>
                         <small style="float:right" class="card-title">by @review.UserEmail</small>
                         <p class="card-text">
                             @review.ReviewDescription
                         </p>
-
+                        @if (User.Identity.Name == review.UserEmail && (DateTime.Now - review.CreatedAt).TotalHours <= 48)
+                        {
+                            <button type="button" onclick="location.href='@Url.Action("EditReview", "Reviews", new { id = review.ReviewID })'">Edit</button>
+                            <button type="button" onclick="location.href='@Url.Action("DeleteReview", "Reviews", new { id = review.ReviewID })'">Delete</button>
+                        }
                     </div>
                 </div>
                 <hr>

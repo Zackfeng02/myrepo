@@ -65,5 +65,58 @@ namespace StreamingServiceApp.DbData
                 UserEmail = item["UserEmail"].S
             };
         }
+        public async Task<Review> GetReviewByIdAsync(string reviewId)
+        {
+            var key = new Dictionary<string, AttributeValue>
+    {
+        { "PK", new AttributeValue { S = $"REVIEW#{reviewId}" } },
+        { "SK", new AttributeValue { S = $"REVIEW#{reviewId}" } }
+    };
+
+            var item = await _dynamoDbHelper.GetItem(TableName, key);
+            return item == null ? null : DynamoDBItemToReview(item);
+        }
+
+        public async Task UpdateReviewAsync(Review review)
+        {
+
+            var key = new Dictionary<string, AttributeValue>
+            {
+                { "PK", new AttributeValue { S = $"MOVIE#{review.MovieId}" } },
+                { "SK", new AttributeValue { S = $"REVIEW#{review.ReviewID}" } }
+            };
+
+            var attributeUpdates = new Dictionary<string, AttributeValueUpdate>
+            {
+                { "Title", new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { S = review.Title } } },
+                { "ReviewDescription", new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { S = review.ReviewDescription } } },
+                { "MovieRating", new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { N = review.MovieRating.ToString() } } },
+                { "CreatedAt", new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { S = review.CreatedAt.ToString("o") } } },
+            };
+
+            try
+            {
+                await _dynamoDbHelper.UpdateItem(TableName, key, attributeUpdates);
+                
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine(ex.Message);
+                
+            }
+        }
+
+        public async Task DeleteReviewAsync(string reviewId)
+        {
+            var key = new Dictionary<string, AttributeValue>
+            {
+                { "PK", new AttributeValue { S = $"REVIEW#{reviewId}" } },
+                { "SK", new AttributeValue { S = $"REVIEW#{reviewId}" } }
+            };
+
+            await _dynamoDbHelper.DeleteItem(TableName, key);
+        }
+
     }
 }
