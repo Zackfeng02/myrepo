@@ -63,7 +63,6 @@ namespace StreamingServiceApp.DbData
                 MovieId = int.Parse(item["MovieId"].N),
                 MovieRating = int.Parse(item["MovieRating"].N),
                 UserEmail = item["UserEmail"].S
-                // The Movie property is not populated here. If needed, you'd fetch it separately.
             };
         }
     }

@@ -46,11 +46,11 @@
           "dependencies": {
             "AWSSDK.DynamoDBv2": {
               "target": "Package",
-              "version": "[3.7.203.3, )"
+              "version": "[3.7.203.13, )"
             },
             "AWSSDK.S3": {
               "target": "Package",
-              "version": "[3.7.205.21, )"
+              "version": "[3.7.205.23, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -62,13 +62,13 @@
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
-              "version": "[6.0.23, )"
+              "version": "[7.0.13, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[6.0.23, )"
+              "version": "[7.0.13, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",

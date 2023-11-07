@@ -41,53 +41,29 @@
                 {
 
                     <div class="col-md-6">
-
                         <div class="card mb-4 shadow-sm">
-                            <img class="card-img-top" src="@m.ImageUrl" alt="@m.MovieName" style="max-width:350px;max-height:200px;">
+                            <img class="card-img-top" src="@m.ImageUrl" alt="Movie image for @m.MovieName" style="max-width:350px;max-height:200px;">
                             <div class="card-body">
-                                <h5 class="card-title">
-                                    @if (m.MovieName == null)
+                                <h5 class="card-title">@m.MovieName ?? "No Name Added"</h5>
+                                <div style="display: flex; flex-direction: row; justify-content:space-between">
+                                    <small class="text-muted">@m.Rating > 0 ? m.Rating.ToString("0/5") : "No Rating Added"</small>
+                                    <small class="text-muted">Release Date: @m.ReleaseDate.Year</small>
+                                    <small class="text-muted" style="float:right">@m.Genre</small>
+                                </div>
+                                <p class="card-text">
+                                    @if (m.Description == null)
                                     {
-                                        @: No Name Added
+                                        @: No Descriptions Available
+                                    }
+                                    else if (m.Description.Length <= 60)
+                                    {
+                                        @m.Description
                                     }
                                     else
                                     {
-                                        @m.MovieName
+                                        @m.Description.Substring(0, 60)
                                     }
-
-                                </h5>
-                                <div style="display: flex; flex-direction: row; justify-content:space-between">
-                                    <small class="text-muted">
-                                        @if (m.Rating == 0)
-                                        {
-                                            @:  No Rating Added
-                                        }
-                                        else
-                                        {
-                                            @m.Rating.ToString("0/5")
-                                        }
-
-                                    </small>
-                                    <small class="text-muted">Release Date: @m.ReleaseDate.Year</small>
-                                    <small class="text-muted" style="float:right">@m.Genre </small>
-                                </div>
-                                <span class="card-text">
-                                    <p class="card-text">
-                                        @if (m.Description == null)
-                                        {
-                                            @: No Descriptions Available
-                                        }
-                                        else if (m.Description.Length < 60)
-                                        {
-                                            @m.Description
-                                        }
-
-                                        else
-                                        {
-                                            @m.Substring(m.Description)
-                                        }
-                                    </p>
-                                </span>
+                                </p>
                                 <br />
                                 <div class="d-flex justify-content-between align-items-center">
                                     <form asp-action="Delete" asp-controller="Movies" method="post" asp-route-id="@m.MovieId">

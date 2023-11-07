@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StreamingServiceApp.Models
 {
@@ -16,6 +17,9 @@ namespace StreamingServiceApp.Models
         public DateTime ReleaseDate { get; set; }
         public double Rating { get; set; } = 0.0;
         public string FilePath { get; set; }
+
+        [NotMapped]
+        public IFormFile UploadedFile { get; set; }
         public string ImageUrl { get; set; }
         public string Substring(string desc)
         {

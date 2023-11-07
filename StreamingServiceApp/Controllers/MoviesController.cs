@@ -63,6 +63,47 @@ namespace StreamingServiceApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (movie.UploadedFile != null && movie.UploadedFile.Length > 0)
+                {
+                    // Generate a unique file name to prevent file overwrites
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(movie.UploadedFile.FileName);
+
+                    // Set the key (path in the bucket where the file will be stored)
+                    var key = $"movies/{fileName}";
+
+                    // Convert the file to a stream
+                    using (var stream = new MemoryStream())
+                    {
+                        await movie.UploadedFile.CopyToAsync(stream);
+
+                        // Prepare the put request
+                        var putRequest = new PutObjectRequest
+                        {
+                            BucketName = BUCKET_NAME,
+                            Key = key,
+                            InputStream = stream,
+                            ContentType = movie.UploadedFile.ContentType
+                        };
+
+                        // Upload the file to S3
+                        var response = await amazonS3.PutObjectAsync(putRequest);
+
+                        // Check the response status
+                        if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            // Set the file path in the movie object to the key of the uploaded file
+                            movie.FilePath = key;
+                        }
+                        else
+                        {
+                            // Handle the error response here
+                            ModelState.AddModelError("", "File upload failed.");
+                            return View(movie);
+                        }
+                    }
+                }
+
+
                 await _movieRepository.SaveMovieAsync(movie);
                 TempData["Created"] = "Movie added successfully!";
                 return RedirectToAction(nameof(Index));
@@ -127,7 +168,5 @@ namespace StreamingServiceApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Assuming you'll handle the S3 related methods in a similar way since they're not directly related to DynamoDB
-        // ... (rest of the methods related to S3)
     }
 }
