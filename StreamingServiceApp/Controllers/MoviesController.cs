@@ -5,6 +5,7 @@ using Amazon.S3.Model;
 using StreamingServiceApp.DbData;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace StreamingServiceApp.Controllers
 {
@@ -16,6 +17,7 @@ namespace StreamingServiceApp.Controllers
         private readonly MovieReviewService _movieReviewService;
         private readonly IUserService _userService;
 
+
         public MoviesController(IMovieRepository movieRepository, MovieReviewService movieReviewService, IUserService userService)
         {
             _movieRepository = movieRepository;
@@ -23,9 +25,28 @@ namespace StreamingServiceApp.Controllers
             _userService = userService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Genre? genre, double? rating)
         {
-            return View(await _movieRepository.GetMoviesAsync());
+            IEnumerable<Movie> movies;
+
+            if (genre.HasValue && rating.HasValue)
+            {
+                movies = await _movieRepository.GetMoviesByGenreAndRatingAsync(genre.Value, rating.Value);
+            }
+            else if (genre.HasValue)
+            {
+                movies = await _movieRepository.GetMoviesByGenreAsync(genre.Value);
+            }
+            else if (rating.HasValue)
+            {
+                movies = await _movieRepository.GetMoviesByRatingAsync(rating.Value);
+            }
+            else
+            {
+                movies = await _movieRepository.GetMoviesAsync();
+            }
+
+            return View(movies);
         }
 
         public async Task<IActionResult> Search(string mName)
@@ -260,6 +281,15 @@ namespace StreamingServiceApp.Controllers
             }
         }
 
-
+        public async Task<IActionResult> FilterByRating(double minRating)
+        {
+            var movies = await _movieRepository.GetMoviesByRatingAsync(minRating);
+            return View("Index", movies); // "Index" is the view you want to return to
+        }
+        public async Task<IActionResult> FilterByGenre(Genre genre)
+        {
+            var movies = await _movieRepository.GetMoviesByGenreAsync(genre);
+            return View("Index", movies); // Assuming "Index" is the view displaying the list of movies
+        }
     }
 }

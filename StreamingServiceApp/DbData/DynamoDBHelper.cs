@@ -97,7 +97,7 @@ namespace StreamingServiceApp.DbData
             {
                 Console.WriteLine($"Table {tableName} not found.");
             }
-            
+
         }
 
         public async Task DeleteItem(string tableName, Dictionary<string, AttributeValue> key)
@@ -135,6 +135,26 @@ namespace StreamingServiceApp.DbData
                 Console.WriteLine($"Table {tableName} not found.");
                 return new List<Dictionary<string, AttributeValue>>();
             }
+        }
+
+        public async Task<List<Dictionary<string, AttributeValue>>> QueryIndex(
+            string tableName,
+            string indexName,
+            string keyConditionExpression,
+            Dictionary<string, AttributeValue> expressionAttributeValues,
+            string filterExpression = null) // Optional parameter for filter expression
+        {
+            var request = new QueryRequest
+            {
+                TableName = tableName,
+                IndexName = indexName,
+                KeyConditionExpression = keyConditionExpression,
+                ExpressionAttributeValues = expressionAttributeValues,
+                FilterExpression = filterExpression // Use the filter expression if provided
+            };
+
+            var response = await _dynamoDbClient.QueryAsync(request);
+            return response.Items;
         }
 
     }

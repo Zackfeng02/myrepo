@@ -15,5 +15,11 @@ namespace StreamingServiceApp.DbData
         Task<Movie> DeleteMovieAsync(int movieID);
 
         Task UpdateMovieAsync(Movie movie);
+
+        Task<IEnumerable<Movie>> GetMoviesByRatingAsync(double rating);
+
+        Task<IEnumerable<Movie>> GetMoviesByGenreAsync(Genre genre);
+
+        Task<IEnumerable<Movie>> GetMoviesByGenreAndRatingAsync(Genre genre, double rating);
     }
 }

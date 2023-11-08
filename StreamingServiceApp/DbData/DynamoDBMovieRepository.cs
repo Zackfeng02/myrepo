@@ -3,6 +3,7 @@ using Amazon.DynamoDBv2.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace StreamingServiceApp.DbData
 {
@@ -132,5 +133,40 @@ namespace StreamingServiceApp.DbData
 
             await _dynamoDbHelper.UpdateItem(TableName, key, updatedAttributes);
         }
+
+        public async Task<IEnumerable<Movie>> GetMoviesByRatingAsync(double rating)
+        {
+            var keyConditionExpression = "Rating = :rating";
+            var expressionAttributeValues = new Dictionary<string, AttributeValue>
+            {
+                { ":rating", new AttributeValue { N = rating.ToString() } }
+            };
+
+            // Query the GSI for movies with the specified rating
+            var items = await _dynamoDbHelper.QueryIndex(
+                TableName,
+                "MovieRatingIndex", // actual GSI name for movie ratings
+                keyConditionExpression,
+                expressionAttributeValues);
+
+            return items.Select(DynamoDBItemToMovie);
+        }
+
+        public async Task<IEnumerable<Movie>> GetMoviesByGenreAndRatingAsync(Genre genre, double rating)
+        {
+            var filterExpression = "begins_with(PK, :pk) AND SK = :sk AND Genre = :genre AND Rating = :rating";
+            var expressionAttributeValues = new Dictionary<string, AttributeValue>
+            {
+                { ":pk", new AttributeValue { S = "MOVIE#" } },
+                { ":sk", new AttributeValue { S = "DETAILS" } },
+                { ":genre", new AttributeValue { S = genre.ToString() } },
+                { ":rating", new AttributeValue { N = rating.ToString() } }
+            };
+
+            var items = await _dynamoDbHelper.ScanTable(TableName, filterExpression, expressionAttributeValues);
+            return items.Select(DynamoDBItemToMovie).ToList();
+        }
+
+
     }
 }

@@ -20,7 +20,6 @@ namespace StreamingServiceApp.DbData
         public static async Task InitializeAsync()
         {
             await SeedMoviesAsync();
-            await SeedUsersAsync();
         }
 
         private static async Task SeedMoviesAsync()
@@ -94,41 +93,6 @@ namespace StreamingServiceApp.DbData
                         { "FilePath", new AttributeValue { S = movie.FilePath } },
                         { "Description", new AttributeValue { S = movie.Description } },
                         { "ImageUrl", new AttributeValue { S = movie.ImageUrl } },
-                    }
-                };
-                await _client.PutItemAsync(request);
-            }
-        }
-
-        private static async Task SeedUsersAsync()
-        {
-            var users = new List<User>
-            {
-                new User
-                {
-                    Email = "zack@gmail.com",
-                    Password = "12345",
-                },
-                new User
-                {
-                    Email = "sample@gmail.com",
-                    Password = "12345",
-                },
-                // ... [Add other user instances here]
-            };
-
-            foreach (var user in users)
-            {
-                var request = new PutItemRequest
-                {
-                    TableName = "StreamingServiceData",
-                    Item = new Dictionary<string, AttributeValue>
-                    {
-                        { "PK", new AttributeValue($"USER#{user.Email}") },
-                        { "SK", new AttributeValue("DETAILS") },
-                        { "Type", new AttributeValue("User") },
-                        { "Email", new AttributeValue(user.Email) },
-                        { "Password", new AttributeValue(user.Password) },
                     }
                 };
                 await _client.PutItemAsync(request);
