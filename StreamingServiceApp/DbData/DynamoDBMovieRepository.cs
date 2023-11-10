@@ -78,6 +78,8 @@ namespace StreamingServiceApp.DbData
                 { "Rating", new AttributeValue { N = movie.Rating.ToString() } },
                 { "FilePath", new AttributeValue { S = movie.FilePath } },
                 { "ImageUrl", new AttributeValue { S = movie.ImageUrl } },
+                { "MovieUserId", new AttributeValue { N = movie.MovieUserId.ToString() } },
+                { "Type", new AttributeValue { S = "Movie"}}
             };
         }
 
@@ -93,6 +95,7 @@ namespace StreamingServiceApp.DbData
                 Rating = double.Parse(item["Rating"].N),
                 FilePath = item["FilePath"].S,
                 ImageUrl = item["ImageUrl"].S,
+                MovieUserId = int.Parse(item["MovieUserId"].N)
             };
         }
 

@@ -86,6 +86,12 @@ namespace StreamingServiceApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Movie movie)
         {
+            if (movie.MovieId == 0)
+            {
+                int nextMovieId = await GetNextMovieIdAsync(); // Implement this method to retrieve the next movie ID
+                movie.MovieId = nextMovieId;
+            }
+
             var currentUser = await _userService.GetCurrentUserAsync();
             if (currentUser == null)
             {
@@ -94,7 +100,7 @@ namespace StreamingServiceApp.Controllers
             }
             // Assuming User is set based on the current logged-in user context
             // This is just an example, replace with your actual logic to retrieve the current user
-            movie.UserId = currentUser.UserId;
+            movie.MovieUserId = currentUser.UserId;
 
             if (movie.UploadedFile != null && movie.UploadedFile.Length > 0)
             {
@@ -149,6 +155,15 @@ namespace StreamingServiceApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        private async Task<int> GetNextMovieIdAsync()
+        {
+            // Retrieve all movie IDs, find the maximum, and add 1
+            // This is a simplified example and should be optimized for production use
+            var allMovies = await _movieRepository.GetMoviesAsync();
+            int maxId = allMovies.Max(m => m.MovieId);
+            return maxId >= 4 ? maxId + 1 : 4;
+        }
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -183,7 +198,7 @@ namespace StreamingServiceApp.Controllers
 
             // Check if the current user is the owner of the movie
             var existingMovie = await _movieRepository.GetMovieAsync(id);
-            if (existingMovie == null || existingMovie.UserId != currentUser.UserId)
+            if (existingMovie == null || existingMovie.MovieUserId != currentUser.UserId)
             {
                 // If the movie doesn't exist or the current user is not the owner, do not allow editing
                 return Forbid(); // or return a view with an error message
@@ -215,13 +230,16 @@ namespace StreamingServiceApp.Controllers
             {
                 return NotFound();
             }
-
+            var currentUser = await _userService.GetCurrentUserAsync();
             var movie = await _movieRepository.GetMovieAsync(id.Value);
             if (movie == null)
             {
                 return NotFound();
             }
-
+            if (movie.MovieUserId != currentUser.UserId)
+            {
+                return NotFound();
+            }
             return View(movie);
         }
 
@@ -237,7 +255,7 @@ namespace StreamingServiceApp.Controllers
 
             // Retrieve the current user
             var currentUser = await _userService.GetCurrentUserAsync();
-            if (currentUser == null || movie.UserId != currentUser.UserId)
+            if (currentUser == null || movie.MovieUserId != currentUser.UserId)
             {
                 // If the current user is not the owner of the movie, do not allow deletion
                 return Forbid(); // or return a view with an error message
@@ -252,33 +270,43 @@ namespace StreamingServiceApp.Controllers
         public async Task<IActionResult> DownloadMovie(int id)
         {
             var movie = await _movieRepository.GetMovieAsync(id);
+            var currentUser = await _userService.GetCurrentUserAsync();
             if (movie == null || string.IsNullOrEmpty(movie.FilePath))
             {
                 return NotFound();
             }
 
-            var request = new GetObjectRequest
+            if (movie.MovieUserId == currentUser.UserId)
             {
-                BucketName = BUCKET_NAME,
-                Key = movie.FilePath
-            };
-
-            try
-            {
-                using (var response = await amazonS3.GetObjectAsync(request))
-                using (var responseStream = response.ResponseStream)
-                using (var memoryStream = new MemoryStream())
+                var request = new GetObjectRequest
                 {
-                    await responseStream.CopyToAsync(memoryStream);
-                    var contentType = response.Headers["Content-Type"];
-                    var fileDownloadName = Path.GetFileName(movie.FilePath);
-                    return File(memoryStream.ToArray(), contentType, fileDownloadName);
+                    BucketName = BUCKET_NAME,
+                    Key = movie.FilePath
+                };
+
+                try
+                {
+                    using (var response = await amazonS3.GetObjectAsync(request))
+                    using (var responseStream = response.ResponseStream)
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await responseStream.CopyToAsync(memoryStream);
+                        var contentType = response.Headers["Content-Type"];
+                        var fileDownloadName = Path.GetFileName(movie.FilePath);
+                        return File(memoryStream.ToArray(), contentType, fileDownloadName);
+                    }
+                }
+                catch (AmazonS3Exception e)
+                {
+                    return NotFound();
                 }
             }
-            catch (AmazonS3Exception e)
+            else
             {
-                return NotFound();
+                return Forbid();
             }
+
+            
         }
 
         public async Task<IActionResult> FilterByRating(double minRating)

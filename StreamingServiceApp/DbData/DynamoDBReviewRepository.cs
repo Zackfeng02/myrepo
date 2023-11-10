@@ -1,5 +1,7 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
+using Amazon.Runtime.Internal.Transform;
+using Microsoft.AspNetCore.Mvc;
 using StreamingServiceApp.Models;
 using System;
 using System.Collections.Generic;
@@ -33,6 +35,10 @@ namespace StreamingServiceApp.DbData
 
         public async Task SaveReviewAsync(Review review)
         {
+            if (review.CreatedAt == default(DateTime))
+            {
+                review.CreatedAt = DateTime.UtcNow;
+            }
             var item = ReviewToDynamoDBItem(review);
             await _dynamoDbHelper.PutItem(TableName, item);
         }
@@ -48,30 +54,74 @@ namespace StreamingServiceApp.DbData
                 { "ReviewDescription", new AttributeValue { S = review.ReviewDescription } },
                 { "MovieRating", new AttributeValue { N = review.MovieRating.ToString() } },
                 { "UserEmail", new AttributeValue { S = review.UserEmail } },
-                // Assuming MovieId is needed as a separate attribute for some operations
-                { "MovieId", new AttributeValue { N = review.MovieId.ToString() } }
+                { "MovieId", new AttributeValue { N = review.MovieId.ToString() } },
+                { "CreatedAt", new AttributeValue { S = review.CreatedAt.ToString("o") } }
+                
             };
         }
 
         private Review DynamoDBItemToReview(Dictionary<string, AttributeValue> item)
         {
-            return new Review
+            if (item == null)
             {
-                ReviewID = item["ReviewID"].S,
-                Title = item["Title"].S,
-                ReviewDescription = item["ReviewDescription"].S,
-                MovieId = int.Parse(item["MovieId"].N),
-                MovieRating = int.Parse(item["MovieRating"].N),
-                UserEmail = item["UserEmail"].S
-            };
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            var review = new Review();
+
+            AttributeValue value;
+            if (item.TryGetValue("ReviewID", out value))
+            {
+                review.ReviewID = value.S;
+            }
+            else
+            {
+                // Handle the absence of ReviewID appropriately
+                throw new KeyNotFoundException("The 'ReviewID' key was not found in the item dictionary.");
+            }
+
+            if (item.TryGetValue("Title", out value))
+            {
+                review.Title = value.S;
+            }
+
+            if (item.TryGetValue("ReviewDescription", out value))
+            {
+                review.ReviewDescription = value.S;
+            }
+
+            if (item.TryGetValue("MovieRating", out value))
+            {
+                review.MovieRating = int.Parse(value.N);
+            }
+
+            if (item.TryGetValue("UserEmail", out value))
+            {
+                review.UserEmail = value.S;
+            }
+
+            if (item.TryGetValue("MovieId", out value))
+            {
+                review.MovieId = int.Parse(value.N);
+            }
+
+            if (item.TryGetValue("CreatedAt", out value))
+            {
+                review.CreatedAt = DateTime.Parse(value.S);
+            }
+
+            return review;
         }
+
         public async Task<Review> GetReviewByIdAsync(string reviewId)
         {
+            string movieId = await GetMovieIdForReview(reviewId);
+
             var key = new Dictionary<string, AttributeValue>
-    {
-        { "PK", new AttributeValue { S = $"REVIEW#{reviewId}" } },
-        { "SK", new AttributeValue { S = $"REVIEW#{reviewId}" } }
-    };
+            {
+                { "PK", new AttributeValue { S = $"MOVIE#{movieId}" } },
+                { "SK", new AttributeValue { S = $"REVIEW#{reviewId}" } }
+            };
 
             var item = await _dynamoDbHelper.GetItem(TableName, key);
             return item == null ? null : DynamoDBItemToReview(item);
@@ -92,6 +142,8 @@ namespace StreamingServiceApp.DbData
                 { "ReviewDescription", new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { S = review.ReviewDescription } } },
                 { "MovieRating", new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { N = review.MovieRating.ToString() } } },
                 { "CreatedAt", new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { S = review.CreatedAt.ToString("o") } } },
+                { "MovieId", new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { N = review.MovieId.ToString() } } },
+                { "UserEmail", new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { S = review.UserEmail } } },
             };
 
             try
@@ -109,14 +161,41 @@ namespace StreamingServiceApp.DbData
 
         public async Task DeleteReviewAsync(string reviewId)
         {
+            string movieId = await GetMovieIdForReview(reviewId);
+
             var key = new Dictionary<string, AttributeValue>
             {
-                { "PK", new AttributeValue { S = $"REVIEW#{reviewId}" } },
+                { "PK", new AttributeValue { S = $"MOVIE#{movieId}" } },
                 { "SK", new AttributeValue { S = $"REVIEW#{reviewId}" } }
             };
 
             await _dynamoDbHelper.DeleteItem(TableName, key);
         }
+
+        public async Task<string> GetMovieIdForReview(string reviewId)
+        {
+            var helper = new DynamoDBHelper(); // Assuming you have an instance of DynamoDBHelper
+            var expressionAttributeValues = new Dictionary<string, AttributeValue>
+            {
+                {":v_ReviewID", new AttributeValue { S = reviewId }}
+            };
+
+            var items = await helper.QueryAsync(
+                tableName: "StreamingServiceData",
+                indexName: "ReviewID-index", // Replace with your GSI name
+                keyConditionExpression: "ReviewID = :v_ReviewID",
+                expressionAttributeValues: expressionAttributeValues
+            );
+
+            if (items.Count > 0)
+            {
+                // Assuming 'MovieId' is stored as a string in DynamoDB
+                return items[0]["MovieId"].N;
+            }
+
+            return null;
+        }
+
 
     }
 }

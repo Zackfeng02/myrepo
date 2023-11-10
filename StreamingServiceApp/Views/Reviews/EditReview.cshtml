@@ -1,0 +1,57 @@
+﻿@model MovieReview
+
+@{
+    ViewData["Title"] = "Movie Web | Edit Review";
+    Layout = "_Layout";
+}
+
+<h1 class="text-center">Edit Review</h1>
+
+<h4 class="text-center">Review for @Model.Movie.MovieName</h4>
+
+<section class="jumbotron text-center">
+    <div class="container">
+        <h2>@Model.Movie.MovieName</h2>
+    </div>
+</section>
+
+<div class="album py-5 bg-light">
+    <div class="container col-md-6">
+        <form asp-controller="Reviews" asp-action="EditReview" method="post">
+            <input type="hidden" asp-for="@Model.Review.ReviewID" />
+            <input type="hidden" asp-for="@Model.Movie.MovieId" />
+            <br />
+            <h3>Edit your review</h3>
+
+            <div class="form-group">
+                <label asp-for="@Model.Review.MovieRating">Rating</label>
+                <div class="form-group">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        @Html.RadioButtonFor(model => model.Review.MovieRating, i) @i
+                    }
+                </div>
+                <span asp-validation-for="@Model.Review.MovieRating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Review.Title">Title</label>
+                <input type="text" class="form-control" asp-for="@Model.Review.Title" />
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Review.ReviewDescription">Review Description</label>
+                <textarea class="form-control" asp-for="@Model.Review.ReviewDescription" rows="5"></textarea>
+            </div>
+            <br />
+            <div class="text-center">
+                <a asp-action="Index" asp-controller="Movies" class="btn btn-outline-danger my-2">Back to movies</a>
+                <button type="submit" class="btn btn-danger my-2">Update</button>
+            </div>
+        </form>
+        @if (TempData["ErrorMessages"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessages"]
+            </div>
+        }
+    </div>
+</div>

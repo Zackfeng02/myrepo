@@ -157,5 +157,35 @@ namespace StreamingServiceApp.DbData
             return response.Items;
         }
 
+        public async Task<List<Dictionary<string, AttributeValue>>> QueryAsync(
+        string tableName,
+        string indexName,
+        string keyConditionExpression,
+        Dictionary<string, AttributeValue> expressionAttributeValues,
+        string filterExpression = null) // Optional parameter for filter expression
+        {
+            var request = new QueryRequest
+            {
+                TableName = tableName,
+                IndexName = indexName,
+                KeyConditionExpression = keyConditionExpression,
+                ExpressionAttributeValues = expressionAttributeValues,
+                FilterExpression = filterExpression // Use the filter expression if provided
+            };
+
+            try
+            {
+                var response = await _dynamoDbClient.QueryAsync(request);
+                return response.Items;
+            }
+            catch (Exception e)
+            {
+                // Handle any exceptions here
+                Console.WriteLine(e.Message);
+                return new List<Dictionary<string, AttributeValue>>();
+            }
+        }
+
+
     }
 }

@@ -102,25 +102,84 @@ namespace StreamingServiceApp.Controllers
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> EditReview(string id)
         {
             var review = await _reviewRepository.GetReviewByIdAsync(id);
-            if (review == null || review.UserEmail != User.Identity.Name || (DateTime.Now - review.CreatedAt).TotalHours > 48)
+            if (review == null)
             {
                 return NotFound();
             }
-            return View(review);
+
+            // Fetch the associated movie details using the MovieId from the review
+            var movie = await _movieRepository.GetMovieAsync(review.MovieId);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            // Create an instance of MovieReview and populate it
+            var movieReview = new MovieReview
+            {
+                Review = review,
+                Movie = movie
+            };
+
+            // Pass the MovieReview instance to the view
+            return View(movieReview);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditReview(Review review)
+        public async Task<IActionResult> EditReview(MovieReview movieReview)
         {
-            if (ModelState.IsValid)
+            // Check if the ReviewID is valid
+            if (string.IsNullOrWhiteSpace(movieReview.Review.ReviewID))
             {
-                await _reviewRepository.UpdateReviewAsync(review);
-                return RedirectToAction("ReviewsList", new { movieId = review.MovieId });
+                ModelState.AddModelError("Review.ReviewID", "Invalid Review ID.");
             }
-            return View(review);
+
+            // Verify that the review exists and the user has permission to edit it
+            Review reviewToEdit = await _reviewRepository.GetReviewByIdAsync(movieReview.Review.ReviewID);
+            if (reviewToEdit == null || reviewToEdit.UserEmail != User.Identity.Name)
+            {
+                ModelState.AddModelError(string.Empty, "You do not have permission to edit this review or it does not exist.");
+            }
+
+            // Validate the associated movie
+            var movie = await _movieRepository.GetMovieAsync(movieReview.MovieId);
+            if (movie == null)
+            {
+                ModelState.AddModelError("Movie.MovieId", "The movie does not exist.");
+            }
+            // Check for required fields
+            if (string.IsNullOrWhiteSpace(movieReview.Review.Title))
+            {
+                ModelState.AddModelError("Review.Title", "Please enter a title for the review.");
+            }
+            if (string.IsNullOrWhiteSpace(movieReview.Review.ReviewDescription))
+            {
+                ModelState.AddModelError("Review.ReviewDescription", "Please enter the review content.");
+            }
+
+            // Validate the movie rating
+            if (movieReview.Review.MovieRating < 1 || movieReview.Review.MovieRating > 5)
+            {
+                ModelState.AddModelError("Review.MovieRating", "The rating must be between 1 and 5.");
+            }
+
+            //if (ModelState.IsValid)
+            //{
+                reviewToEdit.Title = movieReview.Review.Title;
+                reviewToEdit.ReviewDescription = movieReview.Review.ReviewDescription;
+                reviewToEdit.MovieRating = movieReview.Review.MovieRating;
+                reviewToEdit.MovieId = movieReview.Movie.MovieId;
+                reviewToEdit.UserEmail = User.Identity.Name;
+                reviewToEdit.CreatedAt = DateTime.Now;
+
+                await _reviewRepository.UpdateReviewAsync(reviewToEdit);
+                return RedirectToAction("ReviewsList", new { movieId = movieReview.Movie.MovieId });
+            //}
+
         }
 
         public async Task<IActionResult> DeleteReview(string id)

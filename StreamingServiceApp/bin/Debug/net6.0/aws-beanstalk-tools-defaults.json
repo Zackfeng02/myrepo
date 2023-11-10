@@ -8,7 +8,7 @@
     "environment"    : "StreamingServiceApp-dev",
     "enable-xray"    : false,
     "enhanced-health-type" : "basic",
-    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-0f0319cb095764f38,sg-02bd219735f9f53bc\";\"aws:ec2:vpc,Subnets\"=\"subnet-062c07a9aff3d5521,subnet-01f7c26e87f0b5aaa,subnet-04a45d52b5c64cf68,subnet-0a16aedbfe8a8735c,subnet-0b3005230d0e1f7fb,subnet-0049c49b46289ae98\"",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-0f4ffd7ed1b8cc8d8,sg-0bc5ca1e274906192\";\"aws:ec2:vpc,Subnets\"=\"subnet-0e4b25b613d6ee657,subnet-0996f0608c83611ac,subnet-0cb777a0b34978943,subnet-0acaa0f83858aa150,subnet-03223d8d25368d983,subnet-0dfdfe96a8f76ea4d\"",
     "solution-stack"       : "64bit Amazon Linux 2 v2.6.1 running .NET Core",
     "environment-type"     : "SingleInstance",
     "cname"                : "streamingserviceapp-dev",

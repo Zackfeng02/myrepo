@@ -1,3 +1,11 @@
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.csproj.AssemblyReference.cache
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.AssemblyInfoInputs.cache
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.AssemblyInfo.cs
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.csproj.CoreCompileInputs.cache
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.RazorAssemblyInfo.cache
+C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.RazorAssemblyInfo.cs
 C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\net6.0\appsettings.json
 C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\net6.0\aws-beanstalk-tools-defaults.json
@@ -273,14 +281,6 @@ C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\ne
 C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
 C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
-C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.csproj.AssemblyReference.cache
-C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.AssemblyInfoInputs.cache
-C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.AssemblyInfo.cs
-C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.csproj.CoreCompileInputs.cache
-C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.RazorAssemblyInfo.cache
-C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\StreamingServiceApp.RazorAssemblyInfo.cs
 C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\staticwebassets\msbuild.StreamingServiceApp.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\staticwebassets\msbuild.build.StreamingServiceApp.props
 C:\Users\fengz\source\repos\StreamingServiceApp\StreamingServiceApp\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.StreamingServiceApp.props
