@@ -3,13 +3,65 @@
 <head>
     <title>Create/Edit Account</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('accountForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                submitAccountForm();
+            });
+        });
+
+		function submitAccountForm() {
+		    const accountNumber = document.getElementById('accountNumber').value; // Assuming there's an input field with ID 'accountNumber'
+		    const accountData = {
+		        accountTypeCode: document.getElementById('accountTypeCode').value,
+		        balance: document.getElementById('balance').value,
+		        overDraftLimit: document.getElementById('overDraftLimit').value,
+		    };
+		
+		    let url = '/api/accounts';
+		    let method = 'POST';
+		
+		    // Check if updating an existing account
+		    if (accountNumber) {
+		        url += `/${accountNumber}`;
+		        method = 'PUT';
+		        accountData.accountNumber = accountNumber;
+		    }
+		
+		    fetch(url, {
+		        method: method,
+		        headers: {
+		            'Content-Type': 'application/json',
+		            // Include CSRF token if necessary
+		        },
+		        body: JSON.stringify(accountData)
+		    })
+		    .then(response => {
+		        if (!response.ok) {
+		            throw new Error('Network response was not ok');
+		        }
+		        return response.json();
+		    })
+		    .then(data => {
+		        // Handle success
+		        console.log('Success:', data);
+		    })
+		    .catch((error) => {
+		        console.error('Error:', error);
+		    });
+		}
+
+        
+    </script>
 </head>
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">Create/Edit Account</h1>
-        <form th:action="@{/acc_overview/save}" th:object="${account}" method="post" class="border p-4">
+        <form id="accountForm" th:action="@{/acc_overview/save}" th:object="${accountForm}" method="post" class="border p-4">
             <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
             <input type="hidden" th:field="*{accountNumber}">
+            <input type="hidden" th:field="*{customerId}">
             
             <div class="form-group">
                 <label for="accountTypeCode">Account Type:</label>

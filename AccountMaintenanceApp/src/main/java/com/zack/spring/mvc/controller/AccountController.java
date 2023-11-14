@@ -25,7 +25,7 @@ public class AccountController {
     // Account creation
     @GetMapping("/new")
     public String showCreateForm(Model model) {
-        model.addAttribute("account", new Account());
+    	model.addAttribute("account", new Account());
         return "account-form";
     }
     

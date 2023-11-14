@@ -4,11 +4,12 @@
     <title>Account List</title>
     <link rel="stylesheet" th:href="@{/styles.css}">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
     <div th:insert="~{fragments :: navbar}"></div>
     <h1>Account List</h1>
-    <table border="1">
+    <table border="1" id="accountsTable">
         <thead>
             <tr>
                 <th>ID</th>
@@ -19,19 +20,38 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="account : ${accounts}">
-                <td th:text="${account.id}"></td>
-                <td th:text="${account.accountType}"></td>
-                <td th:text="${account.balance}"></td>
-                <td th:text="${account.overDraftLimit}"></td>
-                <td>
-                    <a th:href="@{/accounts/view/{id}(id=${account.id})}">View</a> |
-                    <a th:href="@{/accounts/edit/{id}(id=${account.id})}">Edit</a> |
-                    <a th:href="@{/accounts/delete/{id}(id=${account.id})}">Delete</a>
-                </td>
-            </tr>
+            <!-- Rows will be added here dynamically -->
         </tbody>
     </table>
     <a th:href="@{/acc_overview/new}">Create New Account</a>
+
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: '/api/accounts', // Adjust the URL as per your REST API endpoint
+                method: 'GET',
+                success: function(accounts) {
+                    accounts.forEach(function(account) {
+                        $('#accountsTable tbody').append(
+                            '<tr>' +
+                                '<td>' + account.id + '</td>' +
+                                '<td>' + account.accountType + '</td>' +
+                                '<td>' + account.balance + '</td>' +
+                                '<td>' + account.overDraftLimit + '</td>' +
+                                '<td>' +
+                                    '<a href="/accounts/view/' + account.id + '">View</a> | ' +
+                                    '<a href="/accounts/edit/' + account.id + '">Edit</a> | ' +
+                                    '<a href="/accounts/delete/' + account.id + '">Delete</a>' +
+                                '</td>' +
+                            '</tr>'
+                        );
+                    });
+                },
+                error: function(error) {
+                    console.error("Error fetching accounts:", error);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

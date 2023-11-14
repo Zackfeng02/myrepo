@@ -42,6 +42,14 @@
 		        </ul>
 		    </li>
 		</ul>
+		
+		        <!-- Total Balance by Account Type -->
+        <h2 class="mt-4">Total Balance by Account Type</h2>
+        <ul class="list-group mb-4">
+            <li class="list-group-item" th:each="entry : ${totalBalanceByAccountType}">
+                <span th:text="${entry.key}"></span>: <span th:text="${entry.value}"></span>
+            </li>
+        </ul>
     </div>
 </body>
 </html>

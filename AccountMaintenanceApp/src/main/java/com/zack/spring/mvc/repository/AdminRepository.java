@@ -43,4 +43,16 @@ public class AdminRepository {
         Query query = entityManager.createNativeQuery(sql, Customer.class);
         return query.getResultList();
     }
+    
+    public Map<String, Double> getTotalBalanceByAccountType() {
+        String sql = "SELECT a.account_type_code, SUM(a.balance) " +
+                     "FROM account a " +
+                     "GROUP BY a.account_type_code";
+        Query query = entityManager.createNativeQuery(sql);
+        List<Object[]> results = query.getResultList();
+        return results.stream().collect(Collectors.toMap(
+            res -> (String) res[0], 
+            res -> ((Number) res[1]).doubleValue()
+        ));
+    }
 }
