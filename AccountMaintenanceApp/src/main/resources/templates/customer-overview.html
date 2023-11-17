@@ -41,7 +41,7 @@
 
             // Fetch customer details
             $.ajax({
-                url: '/api/customers/' + customerId, // Adjust the URL as per your REST API endpoint
+                url: '/api/customers/' + customerId, 
                 method: 'GET',
                 success: function(customer) {
                     populateCustomerInfo(customer);
@@ -53,7 +53,7 @@
 
             // Fetch account details
             $.ajax({
-                url: '/api/accounts/customer/' + customerId, // Adjust the URL as per your REST API endpoint
+                url: '/api/accounts/customer/' + customerId, 
                 method: 'GET',
                 success: function(accounts) {
                     populateAccountTable(accounts);
@@ -64,15 +64,31 @@
             });
         });
 
-        function populateCustomerInfo(customer) {
-            var customerInfoHtml = '<div class="row">' +
-                '<div class="col-md-2 font-weight-bold">ID:</div>' +
-                '<div class="col-md-10">' + customer.customerId + '</div>' +
-                '</div>' +
-                // ... Add other customer fields similarly
-                '</div>';
-            $('#customerInfo').html(customerInfoHtml);
-        }
+		function populateCustomerInfo(customer) {
+		    var customerInfoHtml = '<div class="row">' +
+		        '<div class="col-md-2 font-weight-bold">ID:</div>' +
+		        '<div class="col-md-10">' + customer.customerId + '</div>' +
+		        '<div class="col-md-2 font-weight-bold">Username:</div>' +
+		        '<div class="col-md-10">' + customer.username + '</div>' +
+		        '<div class="col-md-2 font-weight-bold">First Name:</div>' +
+		        '<div class="col-md-10">' + customer.firstname + '</div>' +
+		        '<div class="col-md-2 font-weight-bold">Last Name:</div>' +
+		        '<div class="col-md-10">' + customer.lastname + '</div>' +
+		        '<div class="col-md-2 font-weight-bold">Address:</div>' +
+		        '<div class="col-md-10">' + customer.address + '</div>' +
+		        '<div class="col-md-2 font-weight-bold">City:</div>' +
+		        '<div class="col-md-10">' + customer.city + '</div>' +
+		        '<div class="col-md-2 font-weight-bold">Postal Code:</div>' +
+		        '<div class="col-md-10">' + customer.postalcode + '</div>' +
+		        '<div class="col-md-2 font-weight-bold">Phone Number:</div>' +
+		        '<div class="col-md-10">' + customer.phone_number + '</div>' +
+		        '<div class="col-md-2 font-weight-bold">Email ID:</div>' +
+		        '<div class="col-md-10">' + customer.emailId + '</div>' +
+		        '</div>';
+		    $('#customerInfo').html(customerInfoHtml);
+		}
+
+
 
         function populateAccountTable(accounts) {
             var accountTableHtml = '';

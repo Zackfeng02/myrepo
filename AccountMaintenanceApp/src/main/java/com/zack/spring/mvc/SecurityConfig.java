@@ -40,14 +40,14 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authorize) ->
                     authorize
-            				.requestMatchers("/admin/").hasRole("ADMIN")
+            				.requestMatchers("/api/customers/**", "/api/accounts/**").authenticated()
+                    		.requestMatchers("/admin/").hasRole("ADMIN")
                     		.requestMatchers(mvcRequestMatcher).permitAll()
                     		.requestMatchers("/register", "/register/**").permitAll()
-                    		.requestMatchers("/").permitAll()
-                            .requestMatchers("/index").permitAll()
+                    		.requestMatchers("/", "/index").permitAll()
                             .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                            .requestMatchers("/cus_overview", "/cus_overview/**").permitAll()
-                            .requestMatchers("/acc_overview", "/acc_overview/**").permitAll()
+                            .requestMatchers("/cus_overview", "/cus_overview/**").authenticated()
+                            .requestMatchers("/acc_overview", "/acc_overview/**").authenticated()
             )
             .formLogin(form -> form
                             .loginPage("/login")

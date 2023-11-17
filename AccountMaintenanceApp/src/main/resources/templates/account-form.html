@@ -11,57 +11,54 @@
             });
         });
 
-		function submitAccountForm() {
-		    const accountNumber = document.getElementById('accountNumber').value; // Assuming there's an input field with ID 'accountNumber'
-		    const accountData = {
-		        accountTypeCode: document.getElementById('accountTypeCode').value,
-		        balance: document.getElementById('balance').value,
-		        overDraftLimit: document.getElementById('overDraftLimit').value,
-		    };
-		
-		    let url = '/api/accounts';
-		    let method = 'POST';
-		
-		    // Check if updating an existing account
-		    if (accountNumber) {
-		        url += `/${accountNumber}`;
-		        method = 'PUT';
-		        accountData.accountNumber = accountNumber;
-		    }
-		
-		    fetch(url, {
-		        method: method,
-		        headers: {
-		            'Content-Type': 'application/json',
-		            // Include CSRF token if necessary
-		        },
-		        body: JSON.stringify(accountData)
-		    })
-		    .then(response => {
-		        if (!response.ok) {
-		            throw new Error('Network response was not ok');
-		        }
-		        return response.json();
-		    })
-		    .then(data => {
-		        // Handle success
-		        console.log('Success:', data);
-		    })
-		    .catch((error) => {
-		        console.error('Error:', error);
-		    });
-		}
+        function submitAccountForm() {
+            const accountNumber = document.getElementById('accountNumber').value;
+            const accountData = {
+                accountTypeCode: document.getElementById('accountTypeCode').value,
+                balance: parseFloat(document.getElementById('balance').value),
+                overDraftLimit: parseInt(document.getElementById('overDraftLimit').value),
+                customerId: parseInt(document.getElementById('customerId').value) // Assuming there's a field for customer ID
+            };
 
-        
+            let url = '/api/accounts';
+            let method = 'POST';
+
+            if (accountNumber) {
+                url += `/${accountNumber}`;
+                method = 'PUT';
+                accountData.accountNumber = parseInt(accountNumber);
+            }
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_csrf"]').value // Include CSRF token
+                },
+                body: JSON.stringify(accountData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                // Redirect or update UI upon success
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // Display error to the user
+            });
+        }
     </script>
 </head>
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">Create/Edit Account</h1>
-        <form id="accountForm" th:action="@{/acc_overview/save}" th:object="${accountForm}" method="post" class="border p-4">
+        <form id="accountForm" class="border p-4">
             <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-            <input type="hidden" th:field="*{accountNumber}">
-            <input type="hidden" th:field="*{customerId}">
             
             <div class="form-group">
                 <label for="accountTypeCode">Account Type:</label>
