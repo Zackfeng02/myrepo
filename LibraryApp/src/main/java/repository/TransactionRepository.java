@@ -1,7 +1,9 @@
 package repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import Entity.Transaction;
+
+import entity.Transaction;
+
 import java.util.Date;
 import java.util.List;
 

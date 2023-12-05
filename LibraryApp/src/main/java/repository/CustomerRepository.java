@@ -1,7 +1,8 @@
 package repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import Entity.Customer;
+
+import entity.Customer;
 
 import java.util.List;
 import java.util.Optional;
