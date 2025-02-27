@@ -2,9 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { ApolloServer } = require('apollo-server-express');
 const config = require('./config/config');
-const typeDefs = require('./graphql/schema');
+const schema = require('./graphql/schema');
 const resolvers = require('./graphql/resolvers');
 const authMiddleware = require('./middleware/auth');
+const { verifyToken } = require('./middleware/auth');
 
 async function startServer() {
   const app = express();
@@ -17,11 +18,11 @@ async function startServer() {
 
   // Create Apollo Server
   const apolloServer = new ApolloServer({
-    typeDefs,
+    schema,
     resolvers,
     context: ({ req }) => {
       try {
-        const { studentId } = authMiddleware(req);
+        const { studentId } = verifyToken(req);
         return { studentId };
       } catch (err) {
         return {};

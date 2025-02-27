@@ -19,22 +19,32 @@ const resolvers = {
       const hashedPassword = await bcrypt.hash(studentInput.password, 12);
       const student = new Student({ ...studentInput, password: hashedPassword });
       await student.save();
-      const token = jwt.sign({ id: student._id }, config.JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ id: student._id }, config.jwtSecret, { expiresIn: '1h' });
       return { token, student };
     },
     login: async (_, { email, password }) => {
       const student = await Student.findOne({ email });
-      if (!student || !(await bcrypt.compare(password, student.password))) {
+      if (!student) {
+        console.error('No student found for email:', email);
         throw new AuthenticationError('Invalid credentials');
       }
-      const token = jwt.sign({ id: student._id }, config.JWT_SECRET, { expiresIn: '1h' });
-      return { token, student };
+      const passwordValid = await bcrypt.compare(password, student.password);
+      if (!passwordValid) {
+        console.error('Password does not match for:', email);
+        throw new AuthenticationError('Invalid credentials');
+      }
+      try {
+        const token = jwt.sign({ id: student._id }, config.jwtSecret, { expiresIn: '1h' });
+        if (!token) {
+          console.error('Token signing failed');
+          throw new Error('Token signing failed');
+        }
+        return { token, student };
+      } catch (err) {
+        console.error('Error during token signing:', err);
+        throw new Error('Login failed');
+      }
     },
-    addCourse: async (_, { courseInput }, context) => {
-      if (!context.studentId) throw new AuthenticationError('Unauthorized');
-      const course = new Course(courseInput);
-      return await course.save();
-    }
   }
 };
 
