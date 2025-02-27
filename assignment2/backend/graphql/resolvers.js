@@ -19,26 +19,25 @@ const resolvers = {
       const hashedPassword = await bcrypt.hash(studentInput.password, 12);
       const student = new Student({ ...studentInput, password: hashedPassword });
       await student.save();
-      const token = jwt.sign({ id: student._id }, config.jwtSecret, { expiresIn: '1h' });
+      const token = jwt.sign({ studentId: student._id }, config.JWT_SECRET, { expiresIn: '1h' });
       return { token, student };
     },
     login: async (_, { email, password }) => {
+      console.log('Login attempt for:', email);
       const student = await Student.findOne({ email });
       if (!student) {
         console.error('No student found for email:', email);
         throw new AuthenticationError('Invalid credentials');
       }
-      const passwordValid = await bcrypt.compare(password, student.password);
-      if (!passwordValid) {
-        console.error('Password does not match for:', email);
+      const isValid = await bcrypt.compare(password, student.password);
+      console.log('Password valid:', isValid);
+      if (!isValid) {
+        console.error('Password mismatch for email:', email);
         throw new AuthenticationError('Invalid credentials');
       }
       try {
-        const token = jwt.sign({ id: student._id }, config.jwtSecret, { expiresIn: '1h' });
-        if (!token) {
-          console.error('Token signing failed');
-          throw new Error('Token signing failed');
-        }
+        const token = jwt.sign({ studentId: student._id }, config.JWT_SECRET, { expiresIn: '1h' });
+        console.log('Login successful for:', email);
         return { token, student };
       } catch (err) {
         console.error('Error during token signing:', err);

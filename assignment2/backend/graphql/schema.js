@@ -32,6 +32,9 @@ const schema = buildSchema(`
     lastName: String!
     email: String!
     program: String!
+    address: String!
+    city: String!
+    phone: String!
   }
 
   input CourseInput {

@@ -14,7 +14,7 @@ const initializePassport = (passport) => {
     new JwtStrategy(opts, async (jwt_payload, done) => {
       try {
         // Assuming token payload contains an 'id' field; update if needed.
-        const student = await Student.findById(jwt_payload.id);
+        const student = await Student.findById(jwt_payload.studentId);
         if (student) {
           return done(null, student);
         }
@@ -36,7 +36,7 @@ const verifyToken = (req) => {
   // Use the same secret from config
   const decoded = jwt.verify(token, config.jwtSecret);
   // Return the student's id from the token payload (assumed to be 'id')
-  return { studentId: decoded.id };
+  return { studentId: decoded.studentId };
 };
 
 module.exports = {
