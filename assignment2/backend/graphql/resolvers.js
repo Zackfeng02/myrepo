@@ -19,7 +19,7 @@ const resolvers = {
       const hashedPassword = await bcrypt.hash(studentInput.password, 12);
       const student = new Student({ ...studentInput, password: hashedPassword });
       await student.save();
-      const token = jwt.sign({ studentId: student._id }, config.JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ id: student._id }, config.JWT_SECRET, { expiresIn: '1h' });
       return { token, student };
     },
     login: async (_, { email, password }) => {
@@ -27,7 +27,7 @@ const resolvers = {
       if (!student || !(await bcrypt.compare(password, student.password))) {
         throw new AuthenticationError('Invalid credentials');
       }
-      const token = jwt.sign({ studentId: student._id }, config.JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ id: student._id }, config.JWT_SECRET, { expiresIn: '1h' });
       return { token, student };
     },
     addCourse: async (_, { courseInput }, context) => {

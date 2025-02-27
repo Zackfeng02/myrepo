@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Create the HTTP link to your GraphQL API
 const httpLink = createHttpLink({
-  uri: 'http://localhost:5000/graphql'
+  uri: 'http://localhost:4000/graphql'
 });
 
 // Initialize Apollo Client

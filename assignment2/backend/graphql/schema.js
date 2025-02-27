@@ -42,6 +42,7 @@ const schema = buildSchema(`
   }
 
   type Query {
+    student: Student        # Added field for current student
     students: [Student!]
     courses: [Course!]
     studentsInCourse(courseId: ID!): [Student!]
