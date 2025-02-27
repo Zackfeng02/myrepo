@@ -1,16 +1,19 @@
-// Desc: Route for GraphQL API
-const express = require('express');
-const router = express.Router();
-const { graphqlHTTP } = require('express-graphql');
-const schema = require('../graphql/typeDefs');
-const authMiddleware = require('../middleware/passport');
+const { ApolloServer } = require('apollo-server-express');
+const schema = require('../graphql/schema');
+const resolvers = require('../graphql/resolvers');
+const authMiddleware = require('../middleware/auth');
 
-// Apply authentication to all GraphQL requests
-router.use(authMiddleware);
+const server = new ApolloServer({
+  typeDefs: schema,
+  resolvers,
+  context: ({ req }) => {
+    try {
+      const { studentId } = authMiddleware(req);
+      return { studentId };
+    } catch (err) {
+      return {};
+    }
+  }
+});
 
-router.use('/', graphqlHTTP({
-  schema,
-  graphiql: true
-}));
-
-module.exports = router;
+module.exports = server;

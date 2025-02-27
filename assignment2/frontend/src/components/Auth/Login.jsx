@@ -1,36 +1,17 @@
 // Desc: Login component for students
-import React, { useState, useContext } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
-import { useMutation, gql } from '@apollo/client';
-import { AuthContext } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-
-const LOGIN_STUDENT = gql`
-  mutation LoginStudent($email: String!, $password: String!) {
-    loginStudent(email: $email, password: $password)
-  }
-`;
+import { useAuth } from '../../context/AuthContext'; 
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
-  const { setAuthData } = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  const [loginStudent, { loading }] = useMutation(LOGIN_STUDENT, {
-    onCompleted: (data) => {
-      setAuthData({ token: data.loginStudent });
-      navigate('/');
-    },
-    onError: (err) => {
-      setError(err.message);
+  const { login } = useAuth(); // Destructure from the hook
+  
+  // Your login logic here
+  const handleLogin = async () => {
+    try {
+      // ... authentication logic
+      login(token, studentData);
+    } catch (error) {
+      // Handle error
     }
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    loginStudent({ variables: { email, password } });
   };
 
   return (

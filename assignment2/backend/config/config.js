@@ -3,7 +3,7 @@
 require('dotenv').config();
 
 module.exports = {
-  mongoURI: process.env.MONGO_URI || "mongodb://localhost:27017/student_course_db",
-  jwtSecret: process.env.JWT_SECRET || "my-32-character-ultra-secure-and-ultra-long-secret",
-  port: process.env.PORT || 5000
+  MONGODB_URI: process.env.MONGODB_URI || 'mongodb://localhost:27017/student-courses',
+  JWT_SECRET: process.env.JWT_SECRET || 'supersecretkey',
+  PORT: process.env.PORT || 4000
 };

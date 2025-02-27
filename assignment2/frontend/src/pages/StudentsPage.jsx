@@ -1,33 +1,19 @@
-import React, { useState } from 'react';
-import { Container } from 'react-bootstrap';
-import StudentList from '../components/Students/StudentList';
-import StudentCoursesModal from '../components/Students/StudentCoursesModal';
+import { useQuery } from '@apollo/client';
+import { GET_ALL_STUDENTS } from '../services/api';
+import StudentItem from '../components/Students/StudentItem';
 
 const StudentsPage = () => {
-  const [selectedStudentId, setSelectedStudentId] = useState(null);
-  const [showCourses, setShowCourses] = useState(false);
+  const { loading, error, data } = useQuery(GET_ALL_STUDENTS);
 
-  const handleViewCourses = (studentId) => {
-    setSelectedStudentId(studentId);
-    setShowCourses(true);
-  };
-
-  const handleCloseCourses = () => {
-    setShowCourses(false);
-    setSelectedStudentId(null);
-  };
+  if (loading) return <div>Loading students...</div>;
+  if (error) return <div>Error loading students: {error.message}</div>;
 
   return (
-    <Container className="mt-4">
-      <h2 className="mb-4">Students</h2>
-      <StudentList onViewCourses={handleViewCourses} />
-      <StudentCoursesModal
-        studentId={selectedStudentId}
-        show={showCourses}
-        onHide={handleCloseCourses}
-      />
-    </Container>
+    <div className="students-container">
+      <h2>All Students</h2>
+      {data.students.map(student => (
+        <StudentItem key={student._id} student={student} />
+      ))}
+    </div>
   );
 };
-
-export default StudentsPage;

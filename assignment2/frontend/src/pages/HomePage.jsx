@@ -1,18 +1,26 @@
-import React from 'react';
-import { Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { Button, Alert } from 'react-bootstrap';
 
 const HomePage = () => {
+  const { currentStudent } = useAuth();
+
   return (
-    <Container className="mt-4">
-      <div className="p-5 mb-4 bg-light rounded-3">
-        <div className="container-fluid py-5">
-          <h1 className="display-5 fw-bold">Welcome to the Student Course System</h1>
-          <p className="col-md-8 fs-4">
-            Manage your courses and view student details seamlessly.
-          </p>
+    <div className="text-center mt-5">
+      <h1>Welcome to the Student Course System</h1>
+      {!currentStudent && (
+        <Alert variant="info" className="mt-4">
+          Please <Link to="/login">login</Link> or <Link to="/signup">sign up</Link> to continue
+        </Alert>
+      )}
+      {currentStudent && (
+        <div className="mt-4">
+          <Button as={Link} to="/dashboard" variant="primary" size="lg">
+            Go to Dashboard
+          </Button>
         </div>
-      </div>
-    </Container>
+      )}
+    </div>
   );
 };
 
